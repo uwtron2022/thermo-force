@@ -9,7 +9,6 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    bunto-sitemap (3.0.0)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -293,13 +292,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bunto-sitemap
   github-pages
   jekyll-include-cache
-  jekyll-paginate
-  jekyll-sitemap
-  jemoji
-  nokogiri (>= 1.6.7.rc)
 
 BUNDLED WITH
    1.17.2
