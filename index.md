@@ -1,6 +1,5 @@
 ---
 # Front matter
-
 # TODO replace with real image
 header:
     image: "assets/images/glove.jpeg"
