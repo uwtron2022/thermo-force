@@ -1,0 +1,59 @@
+Colin Dewar:
+  name        : "Colin Dewar"
+  bio         : "Controls team lead"
+  avatar      : "/assets/images/cdewar.jpg"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:cdewar@uwaterloo.ca"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://thewhip.com"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/extravagantman"
+
+Ethan Grasely:
+  name        : "Ethan Grasely"
+  bio         : "Project Manager, Controls & Mechanical Co-lead"
+  avatar      : "/assets/images/egrasely.jpg"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:emgrasley@uwaterloo.ca"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://thewhip.com"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/extravagantman"
+
+Emily Studzinski:
+  name        : "Emily Studzinski"
+  bio         : "Mechanical Team Lead"
+  avatar      : "/assets/images/estudzinski.jpeg"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:estudzinski@uwaterloo.ca"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://thewhip.com"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/extravagantman"
+
+Emily Neil:
+  name        : "Emily Neil"
+  bio         : "Software Team Lead"
+  avatar      : "/assets/images/eneil.jpeg"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:eneil@uwaterloo.ca"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://thewhip.com"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/extravagantman"

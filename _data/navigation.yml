@@ -1,15 +1,9 @@
 main:
   - title: "Our Team"
     url: /meet-the-team/
-  - title: "Our Project"
-    url: /project-page/
-  - title: "Temperature Feedback"
-    url: /temperature-feedback-system/
-  - title: "Weight Feedback"
-    url: /weight-feedback-system/
-  - title: "Glove Design"
-    url: /glove-design/
-  - title: "Hand Tracking"
-    url: /hand-tracking-system/
+  - title: "Our Design"
+    url: /design/
   - title: "Dev Blog"
     url: /dev-blog/
+  - title: "Github"
+    url: https://github.com/uwtron2022/thermo-force/tree/main

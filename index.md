@@ -1,39 +1,28 @@
-## ThermoForce !!!!! YAYYYYY !!!!!
+---
+# Front matter
 
-NICE !!
+# TODO replace with real image
+header:
+    image: "assets/images/glove.jpeg"
+---
+## About ThermoGlove
+# The Future of Virtual Reality
+<hr>
+Virtual reality (VR) is an extremely promising technology, one bordering on science fiction levels of futurism, that is 
+not being utilized as well as it could be. We're trying to change that! 
 
-You can use the [editor on GitHub](https://github.com/emilymianeil/thermo-force/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+> VR is a way to escape the real world into something more fantastic. It has the potential to be the most social 
+> technology of all time
+> <br /> - Palmer Luckey, Founder of Oculus Rift
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# The Project
+<hr>
+The focus of our project is to improve current feedback and/or inclusion of new 
+feedback is needed to help realize the full potential of VR. We are realizing this goal
+by creating a VR system with temperature and weight feedback!
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/emilymianeil/thermo-force/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+# The Product
+<hr>
+Our product allows users to immerse themselves in a new world of VR; we are building a set 
+of glove that, when connected to a VR system, can track the user's hands and provide automatic
+weight and temperature feedback.

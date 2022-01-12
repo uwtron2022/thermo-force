@@ -1,4 +1,31 @@
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+minimal_mistakes_skin: "default" #"air", "aqua", , "dark", "dirt", "neon", "mint", "plum", "sunrise"
+
+title: "ThermoForce"
 
 plugins:
   - jekyll-include-cache
+
+include: ["_pages"]
+
+# TODO replace with real logo
+logo: "assets/images/logo.png"
+
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+
+
+
+
+
+
