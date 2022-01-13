@@ -1,5 +1,7 @@
 # How to Write a Logbook Entry
 
+Note that it takes a couple minutes to update on our [dev-blog site](https://uwtron2022.github.io/thermo-force/dev-blog/), so just sit tight for a couple min after you're done :)
+
 1. Make sure you are on the ```gh-pages``` branch (good news ... if you're reading this, you're already here!)
 
 <img src="assets/images/gh_branches.png" width="55%">
