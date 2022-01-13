@@ -294,6 +294,7 @@ PLATFORMS
 DEPENDENCIES
   github-pages
   jekyll-include-cache
+  nokogiri (>= 1.6.7.rc)
 
 BUNDLED WITH
    1.17.2

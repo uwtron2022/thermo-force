@@ -6,8 +6,6 @@
 #plugins:
 #  - jekyll-include-cache
 #
-include: ["_pages"]
-#
 ## TODO replace with real logo
 #logo: "assets/images/logo.png"
 #
@@ -120,38 +118,38 @@ footer:
 
 
 # Reading Files
-#include:
-#  - .htaccess
-#  - _pages
-#exclude:
-#  - "*.sublime-project"
-#  - "*.sublime-workspace"
-#  - vendor
-#  - .asset-cache
-#  - .bundle
-#  - .jekyll-assets-cache
-#  - .sass-cache
-#  - assets/js/plugins
-#  - assets/js/_main.js
-#  - assets/js/vendor
-#  - Capfile
-#  - CHANGELOG
-#  - config
-#  - Gemfile
-#  - Gruntfile.js
-#  - gulpfile.js
-#  - LICENSE
-#  - log
-#  - node_modules
-#  - package.json
-#  - Rakefile
-#  - README
-#  - tmp
-#keep_files:
-#  - .git
-#  - .svn
-#encoding: "utf-8"
-#markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+include:
+  - .htaccess
+  - _pages
+exclude:
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - vendor
+  - .asset-cache
+  - .bundle
+  - .jekyll-assets-cache
+  - .sass-cache
+  - assets/js/plugins
+  - assets/js/_main.js
+  - assets/js/vendor
+  - Capfile
+  - CHANGELOG
+  - config
+  - Gemfile
+  - Gruntfile.js
+  - gulpfile.js
+  - LICENSE
+  - log
+  - node_modules
+  - package.json
+  - Rakefile
+  - README
+  - tmp
+keep_files:
+  - .git
+  - .svn
+encoding: "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
 
 # Conversion
@@ -264,22 +262,22 @@ timezone: America/New_York # https://en.wikipedia.org/wiki/List_of_tz_database_t
 
 
 # Plugins (previously gems:)
-#plugins:
-#  - jekyll-paginate
-#  - jekyll-sitemap
-#  - jekyll-gist
-#  - jekyll-feed
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
 #  - jemoji
-#  - jekyll-include-cache
+  - jekyll-include-cache
 
 # mimic GitHub Pages with --safe
-#whitelist:
-#  - jekyll-paginate
-#  - jekyll-sitemap
-#  - jekyll-gist
-#  - jekyll-feed
+whitelist:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
 #  - jemoji
-#  - jekyll-include-cache
+  - jekyll-include-cache
 
 
 # Archives
