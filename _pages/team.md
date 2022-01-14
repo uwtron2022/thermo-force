@@ -94,7 +94,7 @@ background-color: #555;
       <div class="container">
         <h2>Emily Studzinski</h2>
         <p class="title">Glove Design Lead</p>
-        <p>Hi! I’m also Emily and I’m the glove design lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
+        <p>Hi! I’m Emily and I’m the glove design lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
         <p>I’m responsible for material thermal transfer testing, material selection, material thermal energy transfer simulations, glove design aesthetics, glove design drawings, glove assembly and user testing for glove sub-system.</p>
         <p><button class="button"><a href="mailto:estudzinski@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
       </div>
@@ -120,7 +120,7 @@ background-color: #555;
       <div class="container">
         <h2>Emily Neil</h2>
         <p class="title">Software Lead</p>
-         <p>Hi! I’m Emily and I’m the software lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
+         <p>Hi! I’m also Emily and I’m the software lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
         <p>I’m responsible for website architecture and maintenance, VR development platform design, hand tracking to application to controller architecture design, anti-gravity check design and proof of concept for hand tracking.</p>
         <p><button class="button"><a href="mailto:eneil@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
       </div>
