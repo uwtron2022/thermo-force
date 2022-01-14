@@ -4,8 +4,8 @@
 header:
     image: "assets/images/glove.jpeg"
 ---
-## About ThermoGlove
-# The Future of Virtual Reality
+# About ThermoGlove
+## The Future of Virtual Reality
 <hr>
 Virtual reality (VR) is an extremely promising technology, one bordering on science fiction levels of futurism, that is 
 not being utilized as well as it could be. We're trying to change that! 
@@ -14,14 +14,12 @@ not being utilized as well as it could be. We're trying to change that!
 > technology of all time
 > <br /> - Palmer Luckey, Founder of Oculus Rift
 
-# The Project
+## The Project
 <hr>
-The focus of our project is to improve current feedback and/or inclusion of new 
-feedback is needed to help realize the full potential of VR. We are realizing this goal
-by creating a VR system with temperature and weight feedback!
+This project is being completed as the teams Fourth Year Design Project. Which is a yearlong culminating project that all students at the University of Waterloo take part in. The goal of the project is to take an idea from inception wo working prototype in the span of 8 months. 
 
-# The Product
+The focus of our project is low-cost inclusion of novel VR feedback types to realize the full potential of VR. We are realizing this goal by creating a VR system with temperature and weight feedback! 
+
+## The Product
 <hr>
-Our product allows users to immerse themselves in a new world of VR; we are building a set 
-of glove that, when connected to a VR system, can track the user's hands and provide automatic
-weight and temperature feedback.
+Our product allows users to reach new levels of immersion in any type of VR game. This is done with a glove that, when connected to any VR system, can track the user’s hands and automatically provide temperature and weight feedback.
