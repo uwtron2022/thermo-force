@@ -107,7 +107,7 @@ background-color: #555;
       <img src="../assets/images/egrasely.jpg" alt="Ethan" style="width:100%">
       <div class="container">
         <h2>Ethan Grasely</h2>
-        <p class="title">PM & Mech/Controls</p>
+        <p class="title">PM & Weight Feedback Lead</p>
          <p>Hi! I’m Ethan and I’m the project manager and weight feedback lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
         <p>I’m responsible for the project timeline, scheduling and leading meetings, logbook submissions, timekeeping, presentation planning, deliverable planning and outlining, and budgeting. As weight feedback team lead, I’m responsible for overall architecture of weight feedback system, meaning parts selection and verification, circuit building, controls loop design and implementation, and design/fabrication of the electronics mounting mechanism.</p>
         <p><button class="button"><a href="mailto:emgrasley@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
