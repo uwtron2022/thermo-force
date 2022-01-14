@@ -5,7 +5,7 @@ categories: temperature-feedback
 author: Colin Dewar
 ---
 
-# Temperature Feedback – Jan 1-15, 2022
+# Wires and Heaters and Relays, Oh My
 
 Work at the start of the new year consisted of planning and manufacturing of the custom circuit boards (made of thru-hole components and perf-boards) needed to simplify wiring of the temperature feedback system to the Arduino MEGA (which was selected as the controller). This circuit boards use screw terminal for connections that need to be made to external components, making assembly/disassembly/maintenance easier.
 
