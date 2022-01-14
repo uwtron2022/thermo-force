@@ -2,7 +2,7 @@
 title: "ThermoForce: State of the Project – October 2021"
 date: 2021-10-01 00:00:01 -0000
 categories: project-management
-author: Colin Dewar, Ethan, Grasely, Emily Studzinski, Emily Neil
+author: Ethan Grasely
 ---
 
 # Project Progress - October 2021
