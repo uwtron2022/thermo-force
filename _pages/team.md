@@ -83,7 +83,6 @@ background-color: #555;
         <h2>Colin Dewar</h2>
         <p class="title">Temperature Feedback Lead</p>
         <p>Hi! I’m Colin and I’m the temperature feedback lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
-          <br>
         <p>I'm responsible for temperature feedback controller selection, temperature sensor selection, heating element selection, cooling element selection, temperature feedback proof of concept, temperature circuit design, and temperature controls.</p>
         <p><button class="button"><a href="mailto:cgdewar@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
       </div>
@@ -96,7 +95,6 @@ background-color: #555;
         <h2>Emily Studzinski</h2>
         <p class="title">Glove Design Lead</p>
         <p>Hi! I’m also Emily and I’m the glove design lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
-          <br>
         <p>I’m responsible for material thermal transfer testing, material selection, material thermal energy transfer simulations, glove design aesthetics, glove design drawings, glove assembly and user testing for glove sub-system.</p>
         <p><button class="button"><a href="mailto:estudzinski@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
       </div>
@@ -111,7 +109,6 @@ background-color: #555;
         <h2>Ethan Grasely</h2>
         <p class="title">PM & Mech/Controls</p>
          <p>Hi! I’m Ethan and I’m the project manager and weight feedback lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
-          <br>
         <p>I’m responsible for the project timeline, scheduling and leading meetings, logbook submissions, timekeeping, presentation planning, deliverable planning and outlining, and budgeting. As weight feedback team lead, I’m responsible for overall architecture of weight feedback system, meaning parts selection and verification, circuit building, controls loop design and implementation, and design/fabrication of the electronics mounting mechanism.</p>
         <p><button class="button"><a href="mailto:emgrasley@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
       </div>
@@ -124,7 +121,6 @@ background-color: #555;
         <h2>Emily Neil</h2>
         <p class="title">Software Lead</p>
          <p>Hi! I’m Emily and I’m the software lead for ThermoForce. I’m a 4B Mechatronics Engineering student at the University of Waterloo.</p>
-          <br>
         <p>I’m responsible for website architecture and maintenance, VR development platform design, hand tracking to application to controller architecture design, anti-gravity check design and proof of concept for hand tracking.</p>
         <p><button class="button"><a href="mailto:eneil@uwaterloo.ca" style="text-decoration:none !important; color:#FFFFFF;text-decoration:none;">Contact</a></button></p>
       </div>
