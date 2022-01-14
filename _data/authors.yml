@@ -13,10 +13,10 @@ Colin Dewar:
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/extravagantman"
 
-Ethan Grasely:
+Ethan Grasley:
   name        : "Ethan Grasley"
   bio         : "PM & Weight Feedback Lead"
-  avatar      : "/assets/images/egrasely.jpg"
+  avatar      : "/assets/images/egrasley.jpg"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
