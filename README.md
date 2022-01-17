@@ -18,7 +18,7 @@ Note that it takes a couple minutes to update on our [dev-blog site](https://uwt
 
 ***
 
-4. Name your file in the format ```YYYY-MM-DD_subsytem_area-userid.md``` as seen below
+4. Name your file in the format ```YYYY-MM-DD-subsytem_area-userid.md``` as seen below
 
 <img src="assets/images/file_naming.png" width="55%">
 

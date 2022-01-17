@@ -5,7 +5,7 @@ categories: weight-feedback
 author: Ethan Grasley
 ---
 
-# On Soldering and PWM Troubles
+## On Soldering and PWM Troubles
 
 Work these past two weeks consisted of soldering custom perf boards used to ease wiring of the Arduino MEGA/Motor Driver to the Bluetooth module, 16-bit ADC, shunt resistor, loadcell, and loadcell amplifier. With the circuit complete, code updating was done to bring the old proof of concept Arduino sketches up to date with the new Arduino MEGA controller. 
 

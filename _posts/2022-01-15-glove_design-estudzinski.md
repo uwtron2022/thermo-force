@@ -5,7 +5,7 @@ categories: glove-design
 author: Emily Studzinski
 ---
 
-# Sew Close to a Final Design 
+## Sew Close to a Final Design 
 
 Glove work for the last two weeks consisted of creating and testing glove sewing patters. The current approach is a segmented design, with the full cotton-thermal pad-metal-heater-cotton inner layer being sewed (a sewing machine can stitch right through the thin metal) and the heater being silicone epoxied on and placed on the palm side of the hand, and the protective outer laying being an easily removable Velcro design that wraps around the entire finger/hand. Once the temperature control circuit is entirely built it will be integrated with glove.
 

@@ -1,8 +1,8 @@
 --- 
 title: "ThermoForce: State of the Project – November 2021"
 date: 2021-11-01 00:00:01 -0000
-categories: temperature-feedback weight-feedback project-management vr-hand-tracking glove-design
-author: Colin Dewar Ethan Grasely Emily Studzinski Emily Neil
+categories: project-management
+author: Ethan Grasely
 ---
 
 # Project Progress - November 2021

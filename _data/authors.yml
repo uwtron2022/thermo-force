@@ -1,6 +1,6 @@
 Colin Dewar:
   name        : "Colin Dewar"
-  bio         : "Controls team lead"
+  bio         : "Temperature Feedback Lead"
   avatar      : "/assets/images/cdewar.jpg"
   links:
     - label: "Email"
@@ -13,10 +13,10 @@ Colin Dewar:
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/extravagantman"
 
-Ethan Grasely:
-  name        : "Ethan Grasely"
-  bio         : "Project Manager, Controls & Mechanical Co-lead"
-  avatar      : "/assets/images/egrasely.jpg"
+Ethan Grasley:
+  name        : "Ethan Grasley"
+  bio         : "PM & Weight Feedback Lead"
+  avatar      : "/assets/images/egrasley.jpg"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -30,7 +30,7 @@ Ethan Grasely:
 
 Emily Studzinski:
   name        : "Emily Studzinski"
-  bio         : "Mechanical Team Lead"
+  bio         : "Glove Design Lead"
   avatar      : "/assets/images/estudzinski.jpeg"
   links:
     - label: "Email"
@@ -45,7 +45,7 @@ Emily Studzinski:
 
 Emily Neil:
   name        : "Emily Neil"
-  bio         : "Software Team Lead"
+  bio         : "Software Lead"
   avatar      : "/assets/images/eneil.jpeg"
   links:
     - label: "Email"
