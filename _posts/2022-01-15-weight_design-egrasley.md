@@ -13,4 +13,4 @@ During updating it was noticed that the shunt resistor/ADC combo consistently re
 
 Time was also spent creating a full weight control electrical schematic to be added to the existing temperature control one, and summaries for the previous terms work were created for posting
 
-![](assets/images/Jan1-15_StackWeightCtrlCirc.jpg)
+![](../../assets/images/Jan1-15_StackWeightCtrlCirc.jpg)

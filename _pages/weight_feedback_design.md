@@ -2,7 +2,7 @@
 permalink: /design/weight-feedback/
 ---
 
-![](assets/images/DesignWeightFeedback.jpg)
+![](../../assets/images/DesignWeightFeedback.jpg)
 
 ThermoForce will use a motor and cable system to provide weight feedback, with a goal feedback weight of 5Kg minimum. Since this project is intended as a proof-of-concept, design decisions were made to help reduce costs. This means an Arduino MEGA and Arduino Motor Shield will be used as the main controller and motor driver. An external shunt resistor and ADC (Analog to Digital Converter) will be used to measure motor current, and a loadcell/loadcell amplifier will be used to measure the force exerted on the motor cable (indirectly measuring motor torque), so closed loop force control can be used. Ideally, a motor driver would be used that offers built in current sensing and torque control, to simplify the overall design. 
 

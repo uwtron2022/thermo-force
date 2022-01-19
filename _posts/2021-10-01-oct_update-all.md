@@ -9,16 +9,16 @@ author: Ethan Grasely
 
 The start of October focused on finalizing the working design for the glove: this resulted in the design we see know, resistive heaters, a Peltier plate for cooling, motor and cable for weight feedback, a glove to attach components to, and using an IR hand tracker for game inputs. Based on the selected final design, patent research was performed to see if any patent infringement would occur if this project was to be taken public. The rest of the activities this month focused on research into the specific project areas (temperature and weight feedback, glove design, and software requirements), possible feasible designs, and basic prototyping/proof-of-concepts. Several course deliverables were also due this month.
 
-![](assets/images/OctGloveDes1.png)
+![](../../assets/images/OctGloveDes1.png)
 
-![](assets/images/OctGloveDes2.png)
+![](../../assets/images/OctGloveDes2.png)
 
 
 ## Temperature Feedback Development
 
 Temperature feedback activities focused on ordering flexible resistive heaters, and on simple cooling proof-of-concept using Arduino PWM, a Peltier plate, and thermistors to measure temperature. 
 
-![](assets/images/OctPeltierTest.png)
+![](../../assets/images/OctPeltierTest.png)
 
 
 ## Weight Feedback Development
@@ -35,6 +35,6 @@ Glove design for October focused on research into fabrics and their associated t
 
 Software development for October was limited, as final design decisions were still being made. A GitHub repository for software (Unity VR and Arduino sketches) was created, and the development environment for unity setup. Additionally, on the Arduino side a Bluetooth module was ordered and connected, and a proof of concept was completed show BLE (Bluetooth Low Energy) could be used as a means wireless communications between a computer and feedback controller (Arduino). 
 
-![](assets/images/OctBLEFromArduino.png)
+![](../../assets/images/OctBLEFromArduino.png)
 
-![](assets/images/OctBLEFromPhone.png)
+![](../../assets/images/OctBLEFromPhone.png)

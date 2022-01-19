@@ -14,7 +14,7 @@ November saw in-depth design and proof of concept testing begin. Logic was added
 
 In the first week of November the temperature feedback proof of concept circuit and Arduino sketch were completed and deemed successful. Following this, circuit planning for the entire temperature feedback system began. The circuit is made up of 6 solid state relays, 6 heaters, 1 Peltier plate, and 7 thermistors (1 to measure ambient temperature). Full temperature control loop flowcharts were also created for reference.
 
-![](assets/images/NovTempFeedbackSchematic.png)
+![](../../assets/images/NovTempFeedbackSchematic.png)
 
 
 ## Weight Feedback Development
@@ -26,6 +26,6 @@ For November weight feedback development consisted of building a motor test stan
 
 Glove design consisted of simulations this month. Initial simulations were done with strips of material (as opposed to a full glove shape) and results were promising. Simulations show a temperature increase of 10°C in 3 seconds (using the rated heating power of the selected resistive heaters, 6W) and a temperature drop of 25°C in 2 seconds (thanks to the Peltier plates higher power consumption of 10W). Unfortunately, it was noted that in the simulation heating/cooling was extremely local to the heater/cooler's location, but informal real-life testing showed the heating/cooling effect was more widespread. Regardless, extra heaters were added to help spread the heating effect out. With these results a full glove model simulation was attempted, but limitations of the free program being used meant the complex geometry could not be handles. Additional testing and validation will be done as the glove is built to verify real life performance matches the simulated.
 
-![](assets/images/NovGloveStripSim.png)
+![](../../assets/images/NovGloveStripSim.png)
 
-![](assets/images/NovGloveTempPlacement.png)
+![](../../assets/images/NovGloveTempPlacement.png)

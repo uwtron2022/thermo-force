@@ -13,14 +13,14 @@ Power system design was also finalized at this time. Since we already own 14.4V 
 
 With the circuits completed, heating/cooling controls programming on the Arduino continued. The program was tested with the final heating/cooling components wiring completed and worked successfully, although we are expecting fine-tuning will be needed when the system is fully integrated.
 
-![](assets/images/Jan1-15_BuckConv.jpg)
+![](../../assets/images/Jan1-15_BuckConv.jpg)
 
-![](assets/images/Jan1-15_Relays.jpg)
+![](../../assets/images/Jan1-15_Relays.jpg)
 
-![](assets/images/Jan1-15_Thermistors.jpg)
+![](../../assets/images/Jan1-15_Thermistors.jpg)
 
-![](assets/images/Jan1-15_ResHeaters.jpg)
+![](../../assets/images/Jan1-15_ResHeaters.jpg)
 
-![](assets/images/Jan1-15_FullTempCircuit.jpg)
+![](../../assets/images/Jan1-15_FullTempCircuit.jpg)
 
-![](assets/images/Jan1-15_CurrentElecDwg.jpg)
+![](../../assets/images/Jan1-15_CurrentElecDwg.jpg)

@@ -2,7 +2,7 @@
 permalink: /design/vr-hand-tracking/
 ---
 
-![](assets/images/DesignHandTracking.jpg)
+![](../../assets/images/DesignHandTracking.jpg)
 
 The hand tracking subsystem must be able to track the 3D coordinates of at least each finger and the palm for both user’s hands within a range that is suitable for interacting with a virtual reality program. The hand tracking subsystem must also be able to track the user’s hand movements when covered by a glove. The Leap Motion infrared (IR) hand tracking system was chosen because it is the only hand tracking system available on the market that can meet the constraint of tracking multiple points on the hand and has predefined software modules to track hands with 1.2mm of accuracy. The Leap Motion controller tracks hand coordinate data and sends this data to the application layer (video game) which runs on a Unity platform. Logic on the application layer builds these coordinates into hand objects, which interact with the video game environment. Interaction between objects in the game (hand-to-object contact in the video game) trigger events. These events are then sent to the controller to command the weight and temperature feedback control loops.
 
