@@ -5,6 +5,8 @@ header:
     image: "assets/images/glove.jpeg"
     title: "About ThermoForce"
 ---
+<hr>
+# About Thermoforce
 
 ## The Future of Virtual Reality
 <hr>
