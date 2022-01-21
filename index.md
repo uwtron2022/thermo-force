@@ -3,7 +3,7 @@
 # TODO replace with real image
 header:
     image: "assets/images/glove.jpeg"
-    text: # About ThermoForce
+    heading: # About ThermoForce
 ---
 
 ## The Future of Virtual Reality
