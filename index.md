@@ -4,9 +4,9 @@
 header:
     image: "assets/images/glove.jpeg"
 ---
-<br>
-# About Thermoforce 1
 
+# About Thermoforce
+<br>
 ## The Future of Virtual Reality
 <hr>
 Virtual reality (VR) is an extremely promising technology, one bordering on science fiction levels of futurism, that is 
