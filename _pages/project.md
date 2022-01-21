@@ -10,5 +10,4 @@ defaults:
   author_profile: true
 ---
 
-# hey
-
+# Project
