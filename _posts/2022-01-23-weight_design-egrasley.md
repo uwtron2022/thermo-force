@@ -1,6 +1,6 @@
 --- 
 title: "Weight Feedback – Jan 16-22, 2022"
-date: 2022-01-23 00:00:01 -0000
+date: 2022-01-22 00:00:01 -0000
 categories: weight-feedback
 author: Ethan Grasley
 ---
