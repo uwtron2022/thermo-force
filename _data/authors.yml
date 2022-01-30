@@ -31,7 +31,7 @@ Ethan Grasley:
 Emily Studzinski:
   name        : "Emily Studzinski"
   bio         : "Glove Design Lead"
-  avatar      : "/assets/images/estudzinski.jpeg"
+  avatar      : "/assets/images/estudzinski.jpg"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -46,7 +46,7 @@ Emily Studzinski:
 Emily Neil:
   name        : "Emily Neil"
   bio         : "Software Lead"
-  avatar      : "/assets/images/eneil.jpeg"
+  avatar      : "/assets/images/eneil.jpg"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
