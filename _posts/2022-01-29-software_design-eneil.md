@@ -1,6 +1,6 @@
 --- 
 title: "Software Design – Jan 23-29, 2022"
-date: 2023-01-22 00:00:01 -0000
+date: 2022-01-29 00:00:01 -0000
 categories: vr-hand-tracking
 author: Emily Neil
 ---
