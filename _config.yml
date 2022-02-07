@@ -1,52 +1,16 @@
-#remote_theme: "mmistakes/minimal-mistakes@4.24.0"
-#minimal_mistakes_skin: "default" #"air", "aqua", , "dark", "dirt", "neon", "mint", "plum", "sunrise"
-#
-#title: "ThermoForce"
-#
-#plugins:
-#  - jekyll-include-cache
-#
-## TODO replace with real logo
-#logo: "assets/images/logo.png"
-#
-#defaults:
-#  # _posts
-#  - scope:
-#      path: ""
-#      type: posts
-#    values:
-#      layout: single
-#      author_profile: true
-#      read_time: true
-#      comments: true
-#      share: true
-#      related: true
-
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your entire site, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# `jekyll serve`. If you change this file, please restart the server process.
-
 remote_theme             : "mmistakes/minimal-mistakes@4.24.0"
 
 minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "ThermoForce"
+title                    : "                   -   "
 title_separator          : "-"
-subtitle                 : "UW Mechatronics"
-#name                     : &name "Michael Rose" # &name is a YAML anchor which can be *referenced later
 description              : &description "UW Mechatronics Fourth Year Design Project"
 url                      : https://uwtron2022.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "/thermo-force" # the subpath of your site, e.g. "/blog"
 repository               : "uwtron2022/thermo-force"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : "assets/images/logo.png"
-masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
-# breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
   provider               : "false" # false (default), "disqus", "discourse", "facebook", "staticman_v2", "staticman", "utterances", "giscus", "custom"
@@ -87,8 +51,6 @@ algolia:
 twitter:
   username               : &twitter "ForceThermo"
 og_image                 : "/assets/images/site-logo.png" # Open Graph/Twitter default site image
-# For specifying social profiles, used in _includes/seo.html
-# - https://developers.google.com/structured-data/customize/social-profiles
 social:
   type                   : # Person or Organization (defaults to Person)
   name                   : # If the user or organization name differs from the site's name
@@ -277,37 +239,15 @@ whitelist:
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
-#  - jemoji
   - jekyll-include-cache
 
 
-# Archives
-#  Type
-#  - GitHub Pages compatible archive pages built with Liquid ~> type: liquid (default)
-#  - Jekyll Archives plugin archive pages ~> type: jekyll-archives
-#  Path (examples)
-#  - Archive page should exist at path when using Liquid method or you can
-#    expect broken links (especially with breadcrumbs enabled)
-#  - <base_path>/tags/my-awesome-tag/index.html ~> path: /tags/
-#  - <base_path>/categories/my-awesome-category/index.html ~> path: /categories/
-#  - <base_path>/my-awesome-category/index.html ~> path: /
 category_archive:
   type: liquid
   path: /categories/
 tag_archive:
   type: liquid
   path: /tags/
-# https://github.com/jekyll/jekyll-archives
-# jekyll-archives:
-#   enabled:
-#     - categories
-#     - tags
-#   layouts:
-#     category: archive-taxonomy
-#     tag: archive-taxonomy
-#   permalinks:
-#     category: /categories/:name/
-#     tag: /tags/:name/
 
 
 # HTML Compression
