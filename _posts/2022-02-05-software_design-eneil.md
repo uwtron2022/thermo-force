@@ -5,4 +5,10 @@ categories: vr-hand-tracking
 author: Emily Neil
 ---
 
-## TBD
+## Things Are Heating Up
+
+The Unity scene for the cooking environment has been setup, and is ready for integration testing. While some minor adjustments are likely to me made to the game,
+the basic scene is finalized. Additionally, the stand for the Leap motion controller is complete. Adjustments to the positioning of the controller is to ensue.
+
+Here is a quick peak at the game!
+![](../../assets/images/VideoGameSetup.mp4)
