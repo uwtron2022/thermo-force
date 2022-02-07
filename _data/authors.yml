@@ -11,7 +11,7 @@ Colin Dewar:
       url: "https://thewhip.com"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/extravagantman"
+      url: "https://twitter.com/ForceThermo"
 
 Ethan Grasley:
   name        : "Ethan Grasley"
@@ -26,12 +26,12 @@ Ethan Grasley:
       url: "https://thewhip.com"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/extravagantman"
+      url: "https://twitter.com/ForceThermo"
 
 Emily Studzinski:
   name        : "Emily Studzinski"
   bio         : "Glove Design Lead"
-  avatar      : "/assets/images/estudzinski.jpeg"
+  avatar      : "/assets/images/estudzinski.jpg"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -41,12 +41,12 @@ Emily Studzinski:
       url: "https://thewhip.com"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/extravagantman"
+      url: "https://twitter.com/ForceThermo"
 
 Emily Neil:
   name        : "Emily Neil"
   bio         : "Software Lead"
-  avatar      : "/assets/images/eneil.jpeg"
+  avatar      : "/assets/images/eneil.jpg"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -56,4 +56,4 @@ Emily Neil:
       url: "https://thewhip.com"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/extravagantman"
+      url: "https://twitter.com/ForceThermo"

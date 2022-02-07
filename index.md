@@ -5,6 +5,7 @@ header:
     image: "assets/images/glove.jpeg"
 title: About ThermoForce
 ---
+<br>
 
 ## The Future of Virtual Reality
 <hr>
@@ -17,7 +18,7 @@ not being utilized as well as it could be. We're trying to change that!
 
 ## The Project
 <hr>
-This project is being completed as the teams Fourth Year Design Project. This is a yearlong culminating project that all students at the University of Waterloo take part in. The goal of the project is to take an idea from inception wo working prototype in the span of 8 months. 
+This project is being completed as the teams Fourth Year Design Project. This is a yearlong culminating project that all students at the University of Waterloo take part in. The goal of the project is to take an idea from inception to working prototype in the span of 8 months. 
 
 The focus of our project is low-cost inclusion of novel VR feedback types to realize the full potential of VR. We are realizing this goal by creating a VR system with temperature and weight feedback! 
 

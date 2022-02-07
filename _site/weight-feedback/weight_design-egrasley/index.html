@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Weight Feedback – Jan 1-15, 2022 -                    -</title>
-<meta name="description" content="On Soldering and PWM Troubles">
+<!-- begin _includes/seo.html --><title>Weight Feedback – Jan 30-Feb 5, 2022  -                    -</title>
+<meta name="description" content="3 Ways to Feedback Weight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.">
 
 
   <meta name="author" content="Ethan Grasley">
@@ -22,11 +22,11 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="                   -   ">
-<meta property="og:title" content="Weight Feedback – Jan 1-15, 2022">
+<meta property="og:title" content="Weight Feedback – Jan 30-Feb 5, 2022">
 <meta property="og:url" content="http://localhost:4000/thermo-force/weight-feedback/weight_design-egrasley/">
 
 
-  <meta property="og:description" content="On Soldering and PWM Troubles">
+  <meta property="og:description" content="3 Ways to Feedback Weight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.">
 
 
 
@@ -35,8 +35,8 @@
 
 
   <meta name="twitter:site" content="@ForceThermo">
-  <meta name="twitter:title" content="Weight Feedback – Jan 1-15, 2022">
-  <meta name="twitter:description" content="On Soldering and PWM Troubles">
+  <meta name="twitter:title" content="Weight Feedback – Jan 30-Feb 5, 2022">
+  <meta name="twitter:description" content="3 Ways to Feedback Weight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.">
   <meta name="twitter:url" content="http://localhost:4000/thermo-force/weight-feedback/weight_design-egrasley/">
 
   
@@ -50,7 +50,7 @@
 
 
 
-  <meta property="article:published_time" content="2022-01-14T19:00:01-05:00">
+  <meta property="article:published_time" content="2022-02-04T19:00:01-05:00">
 
 
 
@@ -208,7 +208,7 @@
           
         
           
-            <li><a href="https://twitter.com/extravagantman" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+            <li><a href="https://twitter.com/ForceThermo" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
           
         
       
@@ -278,15 +278,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Weight Feedback – Jan 1-15, 2022">
-    <meta itemprop="description" content="On Soldering and PWM Troubles">
-    <meta itemprop="datePublished" content="2022-01-14T19:00:01-05:00">
+    <meta itemprop="headline" content="Weight Feedback – Jan 30-Feb 5, 2022">
+    <meta itemprop="description" content="3 Ways to FeedbackWeight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.">
+    <meta itemprop="datePublished" content="2022-02-04T19:00:01-05:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Weight Feedback – Jan 1-15, 2022
+          <h1 id="page-title" class="page__title" itemprop="headline">Weight Feedback – Jan 30-Feb 5, 2022
 </h1>
           
 
@@ -314,15 +314,24 @@
 
       <section class="page__content" itemprop="text">
         
-        <h2 id="on-soldering-and-pwm-troubles">On Soldering and PWM Troubles</h2>
+        <h2 id="3-ways-to-feedback">3 Ways to Feedback</h2>
+<p>Weight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.</p>
 
-<p>Work these past two weeks consisted of soldering custom perf boards used to ease wiring of the Arduino MEGA/Motor Driver to the Bluetooth module, 16-bit ADC, shunt resistor, loadcell, and loadcell amplifier. With the circuit complete, code updating was done to bring the old proof of concept Arduino sketches up to date with the new Arduino MEGA controller.</p>
+<p>Motor characterization went more smoothly this week, with all physical motor characteristics found in just under 2 hours. From there a motor control simulation was built using Simulink. A simple proportional integrator controller can be used to control the motor when pulling down on the user’s arm. A second controller needs to be designed for when the user is moving their arm up, since the tracking requirements are different there.</p>
 
-<p>During updating it was noticed that the shunt resistor/ADC combo consistently read 0 on the Arduino monitor, while an external multimeter showed a current draw of 240mA. Some testing needs to be done (with an oscilloscope or using the Arduino serial monitor and a low current draw motor), but the issue is that the motor control signal is pulse-width modulated, meaning the measured current is always going to be zero or maximum and is not indicative of the average motor current draw (which is needed for good, closed loop control of the motor). A resistor-capacitor low pass (averaging) filter will need to be added to the motor control circuit, so the current measuring shunt is recording the true average current the motor draws.</p>
+<p>The baseplate and enclosure that the circuitry and batteries will mount to were finalized. A slight redesign of the baseplate was required to accommodate the fact that the enclosure is going to be slightly shorter than assumed, to better fit into a backpack.</p>
 
-<p>Time was also spent creating a full weight control electrical schematic to be added to the existing temperature control one, and summaries for the previous terms work were created for posting</p>
+<p>Finally, a mounting system to mount the motor and pulley to the user’s thigh, and a way to mount the loadcell to the motor cable were designed this week. The thigh mount has adjustable straps and high-density foam to accommodate a range of thigh sizes, and a solid metal plate to mount the motor securely. The loadcell mount uses swivelling eye bolts so there is no range of motion loss in the user.</p>
 
-<p><img src="../../assets/images/Jan1-15_StackWeightCtrlCirc.jpg" alt="" /></p>
+<p>With this electronics enclosure and weight feedback design are complete!</p>
+
+<p><img src="../../assets/images/Jan30-Feb5_WeightFeedback1.png" alt="" /></p>
+
+<p><img src="../../assets/images/Jan30-Feb5_WeightFeedback2.png" alt="" /></p>
+
+<p><img src="../../assets/images/Jan30-Feb5_WeightFeedback3.png" alt="" /></p>
+
+<p><img src="../../assets/images/Jan30-Feb5_WeightFeedback4.png" alt="" /></p>
 
         
       </section>
@@ -349,7 +358,7 @@
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-01-14T19:00:01-05:00">January 14, 2022</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-04T19:00:01-05:00">February 4, 2022</time></p>
 
 
       </footer>
@@ -357,7 +366,7 @@
       <section class="page__share">
   
 
-  <a href="https://twitter.com/intent/tweet?via=ForceThermo&text=Weight+Feedback+%E2%80%93+Jan+1-15%2C+2022%20http%3A%2F%2Flocalhost%3A4000%2Fthermo-force%2Fweight-feedback%2Fweight_design-egrasley%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?via=ForceThermo&text=Weight+Feedback+%E2%80%93+Jan+30-Feb+5%2C+2022+%20http%3A%2F%2Flocalhost%3A4000%2Fthermo-force%2Fweight-feedback%2Fweight_design-egrasley%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
   <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fthermo-force%2Fweight-feedback%2Fweight_design-egrasley%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
@@ -368,7 +377,7 @@
       
   <nav class="pagination">
     
-      <a href="/thermo-force/temperature-feedback/temp_design-cdewar/" class="pagination--pager" title="Temperature Feedback – Jan 1-15, 2022
+      <a href="/thermo-force/temperature-feedback/temp_design-cdewar/" class="pagination--pager" title="Temperature Feedback – Jan 30-Feb 5, 2022
 ">Previous</a>
     
     
@@ -396,7 +405,7 @@
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/thermo-force/temperature-feedback/temp_design-cdewar/" rel="permalink">Temperature Feedback – Jan 1-15, 2022
+        <a href="/thermo-force/temperature-feedback/temp_design-cdewar/" rel="permalink">Temperature Feedback – Jan 30-Feb 5, 2022
 </a>
       
     </h2>
@@ -421,7 +430,7 @@
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Wires and Heaters and Relays, Oh My
+    <p class="archive__item-excerpt" itemprop="description">Wires here, Wires there, Wires everywhere!
 
 </p>
   </article>
@@ -437,7 +446,7 @@
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/thermo-force/vr-hand-tracking/software_design-eneil/" rel="permalink">Software Design – Jan 1-15, 2022
+        <a href="/thermo-force/vr-hand-tracking/software_design-eneil/" rel="permalink">Software – Jan 30-Feb 5, 2022
 </a>
       
     </h2>
@@ -462,7 +471,47 @@
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">No Escaping Web Dev
+    <p class="archive__item-excerpt" itemprop="description">TBD
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/thermo-force/glove-design/glove_design-estudzinski/" rel="permalink">Glove Design – Jan 30-Feb 5, 2022
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A Whole New Meaning to “Cable Knit”
 
 </p>
   </article>
@@ -478,7 +527,7 @@
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/thermo-force/glove-design/glove_design-estudzinski/" rel="permalink">Glove Design – Jan 1-15, 2022
+        <a href="/thermo-force/weight-feedback/weight_design-egrasley/" rel="permalink">Weight Feedback – Jan 23-29, 2022
 </a>
       
     </h2>
@@ -503,47 +552,7 @@
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Sew Close to a Final Design
-Glove work for the last two weeks consisted of creating and testing glove sewing patters. The current approach is a segmented des...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/thermo-force/project-management/dec_update-all/" rel="permalink">ThermoForce: State of the Project – December 2021
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-
-    
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          less than 1 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">Project Progress - December 2021
+    <p class="archive__item-excerpt" itemprop="description">A Weight on my Shoulders
 
 </p>
   </article>

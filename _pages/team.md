@@ -90,7 +90,7 @@ background-color: #555;
   </div>
   <div class="column">
     <div class="card">
-      <img src="../assets/images/estudzinski.jpeg" alt="EmilyS" style="width:100%">
+      <img src="../assets/images/estudzinski.jpg" alt="EmilyS" style="width:100%">
       <div class="container">
         <h2>Emily Studzinski</h2>
         <p class="title">Glove Design Lead</p>
@@ -116,7 +116,7 @@ background-color: #555;
   </div>
   <div class="column">
     <div class="card">
-      <img src="../assets/images/eneil.jpeg" alt="EmilyN" style="width:100%">
+      <img src="../assets/images/eneil.jpg" alt="EmilyN" style="width:100%">
       <div class="container">
         <h2>Emily Neil</h2>
         <p class="title">Software Lead</p>

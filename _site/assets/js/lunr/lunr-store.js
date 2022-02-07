@@ -24,7 +24,7 @@ var store = [{
         "teaser": null
       },{
         "title": "Glove Design – Jan 1-15, 2022",
-        "excerpt":"Sew Close to a Final Design  Glove work for the last two weeks consisted of creating and testing glove sewing patters. The current approach is a segmented design, with the full cotton-thermal pad-metal-heater-cotton inner layer being sewed (a sewing machine can stitch right through the thin metal) and the heater being silicone epoxied on and placed on the palm side of the hand, and the protective outer laying being an easily removable Velcro design that wraps around the entire finger/hand. Once the temperature control circuit is entirely built it will be integrated with glove.        ","categories": ["glove-design"],
+        "excerpt":"Sew Close to a Final Design   Glove work for the last two weeks consisted of creating and testing glove sewing patters. The current approach is a segmented design, with the full cotton-thermal pad-metal-heater-cotton inner layer being sewed (a sewing machine can stitch right through the thin metal) and the heater being silicone epoxied on and placed on the palm side of the hand, and the protective outer laying being an easily removable Velcro design that wraps around the entire finger/hand. Once the temperature control circuit is entirely built it will be integrated with glove.        ","categories": ["glove-design"],
         "tags": [],
         "url": "/thermo-force/glove-design/glove_design-estudzinski/",
         "teaser": null
@@ -43,6 +43,78 @@ var store = [{
       },{
         "title": "Weight Feedback – Jan 1-15, 2022",
         "excerpt":"On Soldering and PWM Troubles   Work these past two weeks consisted of soldering custom perf boards used to ease wiring of the Arduino MEGA/Motor Driver to the Bluetooth module, 16-bit ADC, shunt resistor, loadcell, and loadcell amplifier. With the circuit complete, code updating was done to bring the old proof of concept Arduino sketches up to date with the new Arduino MEGA controller.   During updating it was noticed that the shunt resistor/ADC combo consistently read 0 on the Arduino monitor, while an external multimeter showed a current draw of 240mA. Some testing needs to be done (with an oscilloscope or using the Arduino serial monitor and a low current draw motor), but the issue is that the motor control signal is pulse-width modulated, meaning the measured current is always going to be zero or maximum and is not indicative of the average motor current draw (which is needed for good, closed loop control of the motor). A resistor-capacitor low pass (averaging) filter will need to be added to the motor control circuit, so the current measuring shunt is recording the true average current the motor draws.   Time was also spent creating a full weight control electrical schematic to be added to the existing temperature control one, and summaries for the previous terms work were created for posting     ","categories": ["weight-feedback"],
+        "tags": [],
+        "url": "/thermo-force/weight-feedback/weight_design-egrasley/",
+        "teaser": null
+      },{
+        "title": "Glove Design – Jan 16-22, 2022",
+        "excerpt":"A Glove, Sewn, not Glued   The glove sewing pattern and approach was finalized this week, complete with more detailed sketches explaining how the inner and outer layers peel away from each other. All required fabric/Velcro/snaps were purchased, and fabrication began. The inner layer is nearly complete, only requiring the electronics to be mounted and for a strip of Velcro to be attached so that the glove can close around the back of the user’s hand. This will be completed soon, and fabrication on the outer layer will begin.              ","categories": ["glove-design"],
+        "tags": [],
+        "url": "/thermo-force/glove-design/glove_design-estudzinski/",
+        "teaser": null
+      },{
+        "title": "Software Design – Jan 16-22, 2022",
+        "excerpt":"Head in the Game, Even without a VR Headset   Minimum viable product (MVP) of the game development was completed this week! These milestones include setting up a Virtual Reality game in Unity that has: a ‘hot’ object, a ‘cold’ object and objects of varying mass. Additionally, the leap motion sensor is used in a first-person context to control these objects. From here, we can further develop the game to make a visually pleasing and fun user experience. Next up from here, is integrating a Bluetooth connection with the Arduino such that the game environment and controls can communicate!  ","categories": ["vr-hand-tracking"],
+        "tags": [],
+        "url": "/thermo-force/vr-hand-tracking/software_design-eneil/",
+        "teaser": null
+      },{
+        "title": "Temperature Feedback – Jan 16-22, 2022",
+        "excerpt":"Not so (Short) Circuit Diagrams   The temperature feedback progressed well over the last week. In-line fuses for the Buck converters were bought and will be installed the following week. These fuses are used to cut power in the case of a short circuit. This will prevent the heaters/cooler from being kept or from both being on at the same time (since the current draw if heating and cooling is more than the fuse is rated for).   Additionally, the temerature circuit wiring was completed and was handed off to Emily Studzinski to be installed in the glove.     ","categories": ["temperature-feedback"],
+        "tags": [],
+        "url": "/thermo-force/temperature-feedback/temp_design-cdewar/",
+        "teaser": null
+      },{
+        "title": "Weight Feedback – Jan 16-22, 2022",
+        "excerpt":"Current Events are Setting Plans in Motion   Work this week consisted of the creation of 3D models of the electronics, creation of a motor control simulation, and creation of the final control program.   The 3D electronics models are being used to create a mounting plate for the electronics. This mounting plate will (ideally) be placed in an IP65 rated container. This container will then be adapted to fit to a backpack so the electronics + battery that run the feedback can move with the person, instead of being stationary.   The motor control simulation will be used to design the control equations that will run the motor at the required current/force. Simulation is being used to ensure that the system is closed-loop stable, has minimal steady state error, and rejects disturbances (meaning the user pulling on the cable will be accounted for when trying to reach a given current/force).   Finally, the outline of the final program that will be used to provide temperature and weight feedback has been created. This includes creation of all global variables needed, initialization of peripherals, and setting up the BLE communications module.     ","categories": ["weight-feedback"],
+        "tags": [],
+        "url": "/thermo-force/weight-feedback/weight_design-egrasley/",
+        "teaser": null
+      },{
+        "title": "Glove Design – Jan 23-29, 2022",
+        "excerpt":"Thready or Knot, here it Comes   The construction of the glove hit a major progress milestone this week with the completion of the fabric body! The inner and outer layers are both complete and have been sewn together, with snaps that can come undone to partially peel away the layers if access to electronics is needed. There are strong Velcro connections at the back palm and at each of the four fingers and thumb to allow for fine adjustments to the size. Most of the hand’s range of motion has been maintained, although the conduction-assisting layers of thermal padding and metal can cause some additional stiffness at the base of the fingers.   The next step is to mount the electronics to the glove and add any other snaps/fastenings as needed to help keep the electronics and cables in place. Once that is complete, we can move to testing.           ","categories": ["glove-design"],
+        "tags": [],
+        "url": "/thermo-force/glove-design/glove_design-estudzinski/",
+        "teaser": null
+      },{
+        "title": "Software Design – Jan 23-29, 2022",
+        "excerpt":"Not too Hot to Handle   Testing with the Leap Motion Controller was completed to ensure materials that are in the glove will not interfere with the Controller’s hand-tracking ability; cloth and PCB boards were used to ensure that material objects do not interfere with tracking and heating pads were used to ensure the infrared band emitted from the resistive heaters will not overlap with the infrared band used to track hand movement.   In terms of game development, the Leap Motion Plugin for unity was used to allow hand-tracking to control objects in the game; the hands are now fully functional in the Unity scene. Finally, server-side scripts for communicating Bluetooth information is complete such that all relevant information can be sent to the controller.  ","categories": ["vr-hand-tracking"],
+        "tags": [],
+        "url": "/thermo-force/vr-hand-tracking/software_design-eneil/",
+        "teaser": null
+      },{
+        "title": "Temperature Feedback – Jan 23-29, 2022",
+        "excerpt":"Extreme Cold Warning, not Just Local   Work this week primarily consisted of determining the wiring layout and lengths that will be required to connect the batteries to the buck converters and then the buck converters to the circuit boards and Arduino. Controller temperature code will be hopefully updated and finalized early next week with the completion of glove sewing and mounting of the heaters, coolers and thermistors. After physical layout is completed the temperature control code can be finished.  ","categories": ["temperature-feedback"],
+        "tags": [],
+        "url": "/thermo-force/temperature-feedback/temp_design-cdewar/",
+        "teaser": null
+      },{
+        "title": "Weight Feedback – Jan 23-29, 2022",
+        "excerpt":"A Weight on my Shoulders   Work this week primarily consisted of motor characterization and design of the enclosure and mount for the controller. A UWaterloo student lab is being used for access to the oscilloscopes and power supplies needed to find the motor voltage/torque constant, armature resistance/inductance, and rotor inertia/friction. An issue arose where the digital tachometer could not accurately read the speed of the shaft on out motor, so I will be going back in with a 3D printed pulley to increase the size of the shaft.   Design was finished on the controller enclosure/mounting system. A laser cut acrylic plate will be used as a surface to bolt control system components down to. The plate will have mounting holes cut and a general-purpose plastic bin will be used as an enclosure. This enclosure will also have mounting holes cut. Finally, a small backpack will be used to hold the enclosure and allow the user to wear it. Holes will be cut in the backpack and M6 nuts/bolts used to secure everything together. Hopefully, a smaller enclosure than the one shown below can be found.     ","categories": ["weight-feedback"],
+        "tags": [],
+        "url": "/thermo-force/weight-feedback/weight_design-egrasley/",
+        "teaser": null
+      },{
+        "title": "Glove Design – Jan 30-Feb 5, 2022",
+        "excerpt":"A Whole New Meaning to “Cable Knit”   Glove fabrication concluded this week with the addition of the electronic components to the fabric glove base! Cable management and testing will follow soon. The thermistors were sewn on and will be secured more thoroughly once electronic testing concludes. The heating pads were adhered to the metal pads using a thin layer of a flexible silicone adhesive, and additional straps were added to the glove to secure the Peltier plate/heat sink combination (as a bonus: it is easily removable if need be). Future adjustments to the glove will be made on an as-needed basis, depending on how testing and integration goes.        ","categories": ["glove-design"],
+        "tags": [],
+        "url": "/thermo-force/glove-design/glove_design-estudzinski/",
+        "teaser": null
+      },{
+        "title": "Software – Jan 30-Feb 5, 2022",
+        "excerpt":"TBD  ","categories": ["vr-hand-tracking"],
+        "tags": [],
+        "url": "/thermo-force/vr-hand-tracking/software_design-eneil/",
+        "teaser": null
+      },{
+        "title": "Temperature Feedback – Jan 30-Feb 5, 2022",
+        "excerpt":"Wires here, Wires there, Wires everywhere!   Software development for the temperature feedback system has been completed. The proof-of-concept code created earlier has been updated to include the final number of heaters and thermistors placed on the glove. An initial mounting baseplate for mounting the electronics components to was 3D printed. This plate will be mounted in a backpack in an enclosure, so everything moves with the user. Finally, the heating/cooling control relays and thermistor control blocks were labelled and validated based on the current state of the glove. Next week subsystem integration can hopefully begin.  ","categories": ["temperature-feedback"],
+        "tags": [],
+        "url": "/thermo-force/temperature-feedback/temp_design-cdewar/",
+        "teaser": null
+      },{
+        "title": "Weight Feedback – Jan 30-Feb 5, 2022 ",
+        "excerpt":"3 Ways to Feedback  Weight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.   Motor characterization went more smoothly this week, with all physical motor characteristics found in just under 2 hours. From there a motor control simulation was built using Simulink. A simple proportional integrator controller can be used to control the motor when pulling down on the user’s arm. A second controller needs to be designed for when the user is moving their arm up, since the tracking requirements are different there.   The baseplate and enclosure that the circuitry and batteries will mount to were finalized. A slight redesign of the baseplate was required to accommodate the fact that the enclosure is going to be slightly shorter than assumed, to better fit into a backpack.   Finally, a mounting system to mount the motor and pulley to the user’s thigh, and a way to mount the loadcell to the motor cable were designed this week. The thigh mount has adjustable straps and high-density foam to accommodate a range of thigh sizes, and a solid metal plate to mount the motor securely. The loadcell mount uses swivelling eye bolts so there is no range of motion loss in the user.   With this electronics enclosure and weight feedback design are complete!              ","categories": ["weight-feedback"],
         "tags": [],
         "url": "/thermo-force/weight-feedback/weight_design-egrasley/",
         "teaser": null
