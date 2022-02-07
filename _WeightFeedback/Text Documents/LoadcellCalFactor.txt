@@ -1,0 +1,4 @@
+HX711 caibration factor: -60.31
+HX711 measured conversion time ms: 105.36
+HX711 measured sampling rate HZ: 9.49
+HX711 measured settlingtime ms: 1687

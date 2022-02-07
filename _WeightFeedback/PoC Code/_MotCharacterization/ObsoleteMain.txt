@@ -1,0 +1,159 @@
+//  // CW stiction voltage
+//  bool cwStictionFound = false;
+//  voltage = 1.3;
+//  while (!cwStictionFound)
+//  {
+//    // Turn on motor
+//    digitalWrite(MOT_DIR, LOW);
+//    analogWrite(MOT_PWM, voltToPWM(voltage));
+//    delay(3000);
+//
+//    // Print
+//    Serial.println("Cmd Voltage: " +String(voltage) + ", Cmd PWM: " + String(voltToPWM(voltage)));
+//    Serial.println("Did motor start turning? (y-yes, n-no)\r\n");
+//    
+//    // Wait for response
+//    analogWrite(MOT_PWM, voltToPWM(0));
+//    while (!Serial.available() > 0) {}
+//
+//    // Check case
+//    String inByte = Serial.readString();
+//    Serial.flush();
+//    delay(100);
+//    if (inByte.indexOf("y") != -1) {
+//      Serial.println("###CW STICTION VOLTAGE: " + String(voltage) + "###\r\n");
+//      cwStictionFound = true;
+//    }
+//    else 
+//      voltage += 0.05;
+//    
+//    // Limit voltage
+//    if (voltage > 12)
+//      voltage = 12;
+//  }
+//
+//  // CCW stiction voltage
+//  bool ccwStictionFound = false;
+//  voltage = 1.3;
+//  while (!ccwStictionFound)
+//  {
+//    // Turn on motor
+//    digitalWrite(MOT_DIR, HIGH);
+//    analogWrite(MOT_PWM, voltToPWM(voltage));
+//    delay(3000);
+//
+//    // Print
+//    Serial.println("Cmd Voltage: " +String(voltage) + ", Cmd PWM: " + String(voltToPWM(voltage)));
+//    Serial.println("Did motor start turning? (y-yes, n-no)\r\n");
+//    
+//    // Wait for response
+//    analogWrite(MOT_PWM, voltToPWM(0));
+//    while (!Serial.available() > 0) {}
+//
+//    // Check case
+//    String inByte = Serial.readString();
+//    Serial.flush();
+//    delay(100);
+//    if (inByte.indexOf("y") != -1) {
+//      Serial.println("###CW STICTION VOLTAGE: " + String(voltage) + "###\r\n");
+//      ccwStictionFound = true;
+//    }
+//    else 
+//      voltage += 0.05;
+//    
+//    // Limit voltage
+//    if (voltage > 12)
+//      voltage = 12;
+//  }
+//
+//  // V to no-load current
+//  Serial.println("###NO LOAD CURRENT COUNTS ARRAY:");
+//  voltage = 0;
+//  for(int i=0;  i<=240; i++) {
+//    // Turn on motor
+//    digitalWrite(MOT_DIR, LOW);
+//    analogWrite(MOT_PWM, voltToPWM(voltage));
+//    delay(3000);
+//
+//    // Take 10 current measurements
+//    int k = 0;
+//    while(k<10) {
+//      shuntADC.triggerConversion();
+//      int16_t rawCounts = shuntADC.getConversion();
+//      if (rawCounts >= 0) {
+//        countsAvg += rawCounts-adcSSCnts;
+//        k++;
+//      }
+//      else
+//        k--;
+//  
+//      if(k<0)
+//        k = 0;
+//    }
+//
+//    // Print avg counts
+//    Serial.println("PWM: " + String(voltToPWM(voltage)) + ", Counts: " + String(float(countsAvg/10)));
+//    countsAvg = 0;
+//    voltage += 0.05;
+//    if (voltage > 12)
+//      voltage = 12;
+//  }
+//  analogWrite(MOT_PWM, voltToPWM(0));
+//  Serial.println("Enter y to continue\r\n");
+//  while (!Serial.available() > 0) {}
+//  
+//  // V to stall current, force
+//  Serial.println("###STALL FORCE COUNTS ARRAY:");
+//  countsAvg = 0;
+//  voltage = 0;
+//  for(int i=0; i<=240; i++) {
+//    // Turn on motor
+//    digitalWrite(MOT_DIR, LOW);
+//    analogWrite(MOT_PWM, voltToPWM(voltage));
+//    delay(3000);
+//
+//    // Take 10 current measurements
+//    int k =0;
+//    while(k<10) {
+//      shuntADC.triggerConversion();
+//      int16_t rawCounts = shuntADC.getConversion();
+//      if (rawCounts >= 0) {
+//        countsAvg += rawCounts-adcSSCnts;
+//        k++;
+//      }
+//      else
+//        k--;
+//  
+//      if(k<0)
+//        k = 0;
+//    }
+//
+//    // Print avg counts
+//    Serial.println("Current: " + String(countsAvg/10));
+//
+//    // Take 10 force measurements
+//    float forceAvg = 0;
+//    for (int k=0; k++; k<10) {
+//      while (!ldclADC.update()) {}
+//      forceAvg += ldclADC.getData();
+//    }
+//
+//    // Print avg counts
+//    Serial.println("Force: " + String(forceAvg/10));
+//    countsAvg = 0;
+//    voltage += 0.05;
+//    if (voltage > 12)
+//      voltage = 12;
+//  }
+//  analogWrite(MOT_PWM, voltToPWM(0));
+//  Serial.println("Enter y to continue");
+//  while (!Serial.available() > 0) {}
+//
+//  // RPM @ X.XV determination
+//  voltage = 12;
+//  digitalWrite(MOT_DIR, LOW);
+//  analogWrite(MOT_PWM, voltToPWM(voltage));
+//  Serial.println("Running at: " + String(voltToPWM(voltage)));
+//  Serial.println("Enter y to continue");
+//  while (!Serial.available() > 0) {}
+//  Serial.flush();
