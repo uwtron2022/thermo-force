@@ -31,4 +31,4 @@ Detailed glove design and glove fabrication was completed throughout the month o
 
 ## Software Development
 
-Software summary
+MVP for the game has been complete; the entire Unity scene with a range of objects with varying masses and temperatures has been implemented. These numbers feed into the stream to be sent to the controls system. A Bluetooth low energy API will be implemented to complete this communication. Additionally, the website development has started and completed and details all relevant public information including about the team, development blog posts, and about the project. The website was developed using an open-source skin on top of GitHub pages. The focus in February will be to refine the website and refine the Unity scene after successfully implementing the Bluetooth communication. 
