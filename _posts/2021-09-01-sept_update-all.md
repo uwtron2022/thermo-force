@@ -2,7 +2,7 @@
 title: "ThermoForce: State of the Project – September 2021"
 date: 2021-09-01 00:00:01 -0000
 categories: project-management
-author: Ethan Grasely
+author: Ethan Grasley
 ---
 
 # Project Progress - September 2021
