@@ -5,7 +5,7 @@ categories: project-management
 author: Ethan Grasley
 ---
 
-# Project Progress - January 2021
+# Project Progress - January 2022
 
 January saw the finalization of design and beginning of system integration. Controls circuitry and glove design were finalized in the first two weeks of the month, along with the design and creation of the development blog website. Following this, an electronics enclosure was designed, the motor used for weight feedback characterized, and work began on glove fabrication. The BLE communications format was finalized, and the minimum viable product completed for the VR game space. At the end of the month wiring harnesses for temperature control were created and attached to the glove, a proportional-integrator control loop for weight feedback was designed, and the LEAP motion controller was tested with glove stand-ins to ensure the IR tracking still worked. 
 
