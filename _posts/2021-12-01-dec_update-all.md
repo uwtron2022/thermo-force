@@ -1,8 +1,8 @@
 --- 
 title: "ThermoForce: State of the Project – December 2021"
-date: 2021-12-01 00:00:01 -0000
+date: 2021-12-31 00:00:01 -0000
 categories: project-management
-author: Ethan Grasely
+author: Ethan Grasley
 ---
 
 # Project Progress - December 2021
