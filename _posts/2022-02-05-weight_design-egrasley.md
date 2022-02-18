@@ -6,6 +6,7 @@ author: Ethan Grasley
 ---
 
 ## 3 Ways to Feedback
+
 Weight feedback featured a triple feature this week. Motor characterization and control loop design, electronics enclosure and mounting design, and motor thigh mount + wrist anchor point design.  
 
 Motor characterization went more smoothly this week, with all physical motor characteristics found in just under 2 hours. From there a motor control simulation was built using Simulink. A simple proportional integrator controller can be used to control the motor when pulling down on the user's arm. A second controller needs to be designed for when the user is moving their arm up, since the tracking requirements are different there. 
