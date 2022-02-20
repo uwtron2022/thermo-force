@@ -9,6 +9,6 @@ author: Ethan Grasley
 
 Due to several deliverables for other classes being due this week, work on weight Feeback was minimal. The machining order for the thigh bar and loadcell arms that are part of the weight feedback system were sent to the engineering machine shop on Tuesday and will be ready shortly.
 
-![](../../assets/images/WeightFdbck_feb13-19_1.png)
+![](../../assets/images/Feb13-19_WeightFdbck_1.png)
 
-![](../../assets/images/WeightFdbck_feb13-19_2.png)
+![](../../assets/images/Feb13-19_WeightFdbck_2.png)
