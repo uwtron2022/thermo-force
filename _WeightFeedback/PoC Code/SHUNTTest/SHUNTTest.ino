@@ -26,7 +26,7 @@ void setupMotorShield() {
   pinMode(MOT_PWM, OUTPUT);
   digitalWrite(MOT_BRK, LOW);
   digitalWrite(MOT_DIR, LOW);
-  analogWrite(MOT_PWM, 0);
+  analogWrite(MOT_PWM, 50);
   Serial.println("Motor Initialized");
 
   // Start Motor

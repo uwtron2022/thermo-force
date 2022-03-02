@@ -1,8 +1,8 @@
 /*************************************************************
 FYDP-Group12
 -Main program for ThermoForce temperature/weight control
-  -Mot dir pin LOW = CW when facing motor shaft, voltage +ve
-  -Mot dir pin HIGH = CCW when facing motor shaft, voltage -ve
+  -With MOT_DIR HIGH: CW-Anti Gravity, -ve Voltage Req. -ve Current Read
+  -With MOT_DIR LOW: CCW-Gravity, +ve Voltage Req, +ve Current Read
 *************************************************************/
 // Includes
 #include <Adafruit_BluefruitLE_UART.h>
@@ -22,10 +22,12 @@ const String BLE_EMPTY_RX = "nodata";
 // Loadcell Const
 const uint8_t LDCL_DOUT = 18;
 const uint8_t LDCL_SCK = 9;
+const float LDCL_CAL = 0.73;
 // Motor Const
 const uint8_t MOT_BRK = 8;
 const uint8_t MOT_PWM = 11;
 const uint8_t MOT_DIR = 13;
+const uint8_t MOT_STICTION = 33;
 // Shunt/ADC Const
 const uint8_t SHUNT_MULT = 20; // 1/R
 const float ADC_VPER_CNT = 0.0078125; // mV
@@ -46,13 +48,13 @@ const uint8_t THERM_PALM = 13;
 const uint8_t THERM_CLR = 14;
 const uint8_t THERM_AMB = 15;
 // Temperature Const
-const uint8_t TEMP_MAX = 35;
+const uint8_t TEMP_MAX = 40;
 const uint8_t TEMP_MIN = 10;
-const uint16_t TEMP_PERIOD = 1000; // Milliseconds
+const uint16_t TEMP_PERIOD = 250; // Milliseconds
 // Weight Control Const
 const float GRAM_GRAVITY = 0.981; // N/g
-const float SPOOL_RAD = 0.5*3/100;
-const float TORQ_CONST = 1.20124389328973*1000; // mA/Nm
+const float SPOOL_RAD = 2.5; // cm
+const float TORQ_CONST = 1.2012439*10; // mA/Ncm
 const uint16_t MASS_MAX = 20000; // Grams
 const uint16_t MASS_MIN = 500; // Grams
 
@@ -62,7 +64,6 @@ bool bleConnected = false;
 bool  bleHeartbeat = false;
 uint8_t bleCommFails = 0;
 // Loadcell
-float ldclCalVal = -60.31;
 float ldclGrams = 0;
 volatile boolean ldclMeasRdy = false;
 // Motor
@@ -71,7 +72,7 @@ uint8_t motPWM = 0;
 uint16_t adcSSCnts = 0;
 // Temp Feedback
 bool htrOn = false;
-uint8_t tempOnTimes[6] = {0, 0, 0, 0, 0, 0};
+uint16_t tempOnTimes[6] = {0, 0, 0, 0, 0, 0};
 uint16_t currTime = 0;
 uint32_t timeElapsed = 0;
 float refTemp = 0;
@@ -110,6 +111,10 @@ bool setupBLE () { // Serial2 used to communicate w/ BLE module
     Serial.println("Waiting for BLE connection");
     delay(1000);
   }
+
+  // Setup connection parameters
+  bleUART.println("AT+GAPDEVNAME=FYDP_GROUP12");
+  
   Serial.println("BLE connected");
   Serial.println("BLE initialized\r\n");
   bleConnected = true;
@@ -132,7 +137,7 @@ bool setupLDCL () {
     Serial.println("Failed to setup loadcell\r\n");
     return false;
   }
-  ldclADC.setCalFactor(ldclCalVal);
+  ldclADC.setCalFactor(LDCL_CAL);
   attachInterrupt(digitalPinToInterrupt(LDCL_DOUT), ldclReadyISR, FALLING);
   Serial.println("Current calibration factor is: " + String(ldclADC.getCalFactor()));
   Serial.println("Loadcell initialized\r\n");
@@ -151,6 +156,7 @@ bool setupMOTShield () {
   pinMode(MOT_PWM, OUTPUT);
   digitalWrite(MOT_BRK, LOW);
   digitalWrite(MOT_DIR, LOW);
+  analogWrite(MOT_PWM, 0);
 
   // Setup Non-Audible Fast PWM Frequency 31372.55 Hz
   //  // Bit7,5,3=1 & Bit6,4,2=0 for Non-Inverting PWM, Bit1=0 & Bit0=1 for Fast PWM Mode 
@@ -215,6 +221,13 @@ bool setupHeatCool() {
   pinMode(HTR_PNKY, OUTPUT);
   pinMode(HTR_PALM, OUTPUT);
   pinMode(PELT_CLR, OUTPUT);
+  // turn off all heaters and coolers 
+  digitalWrite(HTR_THMB, HIGH);
+  digitalWrite(HTR_INDX, HIGH);
+  digitalWrite(HTR_MIDL, HIGH);
+  digitalWrite(HTR_PNKY, HIGH);
+  digitalWrite(HTR_PALM, HIGH);
+  digitalWrite(PELT_CLR, HIGH);
 
   // Success
   Serial.println("Heaters/Cooler initialized\r\n");
@@ -244,12 +257,12 @@ bool setupThermistors() {
 // Failsafe Function
 void failSafe() {
 // Turn off heaters/coolers
-  digitalWrite(HTR_THMB, LOW);
-  digitalWrite(HTR_INDX, LOW);
-  digitalWrite(HTR_MIDL, LOW);
-  digitalWrite(HTR_PNKY, LOW);
-  digitalWrite(HTR_PALM, LOW);
-  digitalWrite(PELT_CLR, LOW);
+  digitalWrite(HTR_THMB, HIGH);
+  digitalWrite(HTR_INDX, HIGH);
+  digitalWrite(HTR_MIDL, HIGH);
+  digitalWrite(HTR_PNKY, HIGH);
+  digitalWrite(HTR_PALM, HIGH);
+  digitalWrite(PELT_CLR, HIGH);
 
   // Turn off motor
   digitalWrite(MOT_PWM, LOW);
@@ -307,13 +320,15 @@ bool bleTX(String msg) {
 float currMeasSmoothed() {
   // Read and average current counts
   uint8_t totRuns = 0;
-  uint16_t countsAvg = 0;
+  uint32_t countsAvg = 0;
   for (uint8_t i=0; i<5; i++) {
       // Read measurement
       shuntADC.triggerConversion();
       int16_t rawCounts = shuntADC.getConversion();
-      if (rawCounts >= 0)
+      if (rawCounts >= 0 && rawCounts > adcSSCnts)
         countsAvg += rawCounts-adcSSCnts;
+      else if (rawCounts >= 0 && rawCounts < adcSSCnts)
+        countsAvg += 0;
       else if (i > 1)
         i--;
       else
@@ -326,9 +341,10 @@ float currMeasSmoothed() {
     }
 
   // Return mA's, change sign according to direction
-  return (digitalRead(MOT_DIR) == HIGH) ? -(countsAvg/5)*SHUNT_MULT*ADC_VPER_CNT : -(countsAvg/5)*SHUNT_MULT*ADC_VPER_CNT;
+  return (countsAvg/5)*SHUNT_MULT*ADC_VPER_CNT;
 }
 
+// Loadcell ISR Funttion
 void ldclReadyISR() {
   // Set flag for ldcl ready
   if(ldclADC.update())
@@ -382,7 +398,7 @@ void setup() {
        Serial.println("***HEATERS/COOLER INITIALIZATION FAIL***\r\n");
     if(!thermistorSuccess)
        Serial.println("***THERMISTOR INITIALIZATION FAIL***\r\n");
-    while(true) {};
+//    while(true) {};
   }
 
   // Flush
@@ -398,6 +414,7 @@ void setup() {
 void loop() { 
   // Read BLE
   String cmdLine = bleRX();
+  //String cmdLine = "-min -t -10 -max -t 50 -min -w 2 -max -w 10 -t 25";
   if (DEBUG_PRINT)
     Serial.println("***Bluetooth Values***");
   if (cmdLine != BLE_EMPTY_RX) {
@@ -440,37 +457,41 @@ void loop() {
       else {
         if (setTemp) {
           if (setMax) {
-            maxTemp = String(currToken).toFloat();
+            maxTemp = String(currToken).toInt();
             setMax = false;
             setTemp = false;
           } 
           else if (setMin) {
-            minTemp = String(currToken).toFloat();
+            minTemp = String(currToken).toInt();
             setMin = false;
             setTemp = false;
           }
           else {
-            refTemp = (String(currToken).toFloat()-minTemp)*(TEMP_MAX-TEMP_MIN)/(maxTemp-minTemp) + TEMP_MIN;
+            refTemp = (String(currToken).toFloat()-minTemp)*(1.0*(TEMP_MAX-TEMP_MIN)/(maxTemp-minTemp)) + TEMP_MIN;
             setTemp = false;
           }
         }
         if (setMass) {
           if (setMax) {
-            minMass = 1000*String(currToken).toFloat();
+            maxMass = String(currToken).toInt();
             setMax = false;
             setMass = false;
           }
           else if (setMin) {
-            maxMass = 1000*String(currToken).toFloat();
-            setMax = false;
+            minMass = String(currToken).toInt();
+            setMin = false;
             setMass = false;
           }
           else {
-            refMass = (1000*String(currToken).toFloat()-minMass)*(MASS_MAX-MASS_MIN)/(maxMass-minMass) + MASS_MIN; // Mass recv in Kg, convert to grams
+            if (String(currToken).toInt() == 0)
+              refMass = 0;
+            else
+              refMass = (String(currToken).toFloat()-minMass)*(1.0*(MASS_MAX-MASS_MIN)/(maxMass-minMass)) + MASS_MIN;
             setMass = false;
           }
         }
-      } 
+      }
+      
       // Read new currToken
       currToken = strtok(NULL, splitcurrToken);
     }
@@ -491,10 +512,12 @@ void loop() {
     failSafe();
   
   // Read temperature sensors
-  float handTemps[5];
+  float handTemps[6];
+  float midl1Temp = voltToTemp(THERM_MIDL1);
+  float midl2Temp = voltToTemp(THERM_MIDL2);
   handTemps[0] = voltToTemp(THERM_THMB);
   handTemps[1] = voltToTemp(THERM_INDX);
-  handTemps[2] = 0.5*(voltToTemp(THERM_MIDL1)+voltToTemp(THERM_MIDL2));
+  handTemps[2] = 0.5*(midl1Temp+midl2Temp);
   handTemps[3] = voltToTemp(THERM_PNKY);
   handTemps[4] = voltToTemp(THERM_PALM);
   float clrTemp = voltToTemp(THERM_CLR);
@@ -504,8 +527,8 @@ void loop() {
     Serial.println("***Thermistor Values***");
     Serial.println("Thumb(degC): " + String(handTemps[0]));
     Serial.println("Index(degC): " + String(handTemps[1]));
-    Serial.println("Middle 1(degC): " + String(voltToTemp(THERM_MIDL1)));
-    Serial.println("Middle 2(degC): " + String(voltToTemp(THERM_MIDL2)));
+    Serial.println("Middle 1(degC): " + String(midl1Temp));
+    Serial.println("Middle 2(degC): " + String(midl2Temp));
     Serial.println("Pinky(degC): " + String(handTemps[3]));
     Serial.println("Palm(degC): " + String(handTemps[4]));
     Serial.println("Cooler(degC): " + String(clrTemp));
@@ -514,12 +537,15 @@ void loop() {
   }
   
   // Read weight feedback sensors
-  ldclGrams = ldclMeasRdy ? ldclADC.getData()  : ldclGrams;
-  float currMilliAmps = currMeasSmoothed();
+  if (ldclMeasRdy) {
+    ldclGrams = ldclADC.getData();
+    ldclMeasRdy = false;
+  }
+  float currMilliAmps = digitalRead(MOT_DIR) == LOW ? currMeasSmoothed() : -currMeasSmoothed();
   if (DEBUG_PRINT) {
     Serial.println("***Weight Feedback Values***");
     Serial.println("Loadcell(g): " + String(ldclGrams));
-    Serial.println("Current(mA): " + String(currMilliAmps) + "\r\n");
+    Serial.println("Current(mA): " + String(currMilliAmps)+ "\r\n");
   }
   
   // Calculate temperature control signals
@@ -569,42 +595,53 @@ void loop() {
   // Calculate weight control signals
   float refCurr = refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST;
   currErr += refCurr - currMilliAmps;
+  float vCtrl = 2.5*currErr/1000;
+  if (vCtrl < 0 && vCtrl > -MOT_STICTION)
+    vCtrl -= 1;
+  else if (vCtrl > 0 && vCtrl < MOT_STICTION)
+    vCtrl += 1;
   int16_t vRef = voltToPWM(2.5*currErr/1000);
   if (DEBUG_PRINT) {
     Serial.println("***Weight Feedback Signals***");
     Serial.println("Ref Current(mA): " + String(refCurr));
     Serial.println("Current Error: " + String(currErr));
-    Serial.println("PWM Signal: " + String(vRef) + "\r\n");
+    Serial.println("PWM Signal: " + String(vRef));
   }
   
   // Write temperature output
   if (htrOn) {
-    if (currTime < tempOnTimes[0]) // Thumb
-      digitalWrite(HTR_THMB, HIGH);
-    else
+    if (currTime < tempOnTimes[0] && handTemps[0] < TEMP_MAX) // Thumb
       digitalWrite(HTR_THMB, LOW);
-    if (currTime < tempOnTimes[1]) // Index
-      digitalWrite(HTR_INDX, HIGH);
     else
+      digitalWrite(HTR_THMB, HIGH);
+    if (currTime < tempOnTimes[1] && handTemps[1] < TEMP_MAX) // Index
       digitalWrite(HTR_INDX, LOW);
-    if (currTime < tempOnTimes[2]) // Middles
-      digitalWrite(HTR_MIDL, HIGH);
     else
+      digitalWrite(HTR_INDX, HIGH);
+    if (currTime < tempOnTimes[2] && midl1Temp < TEMP_MAX && midl2Temp < TEMP_MAX) // Middles
       digitalWrite(HTR_MIDL, LOW);
+    else
+      digitalWrite(HTR_MIDL, HIGH && handTemps[1] < TEMP_MAX);
     if (currTime < tempOnTimes[3]) // Pinky
-      digitalWrite(HTR_PNKY, HIGH);
-    else
       digitalWrite(HTR_PNKY, LOW);
-    if (currTime < tempOnTimes[4]) // Palm
-      digitalWrite(HTR_PALM, HIGH);
     else
+      digitalWrite(HTR_PNKY, HIGH);
+    if (currTime < tempOnTimes[4] && handTemps[1] < TEMP_MAX) // Palm
       digitalWrite(HTR_PALM, LOW);
+    else
+      digitalWrite(HTR_PALM, HIGH);
+    digitalWrite(PELT_CLR, HIGH);
   }
   else if (!htrOn) {
-    if (currTime < tempOnTimes[5]) // Peltier
-      digitalWrite(PELT_CLR, HIGH);
-    else
+    if (currTime < tempOnTimes[5] && clrTemp > TEMP_MIN) // Peltier
       digitalWrite(PELT_CLR, LOW);
+    else
+      digitalWrite(PELT_CLR, HIGH);
+    digitalWrite(HTR_THMB, HIGH);
+    digitalWrite(HTR_INDX, HIGH);
+    digitalWrite(HTR_MIDL, HIGH);
+    digitalWrite(HTR_PNKY, HIGH);
+    digitalWrite(HTR_PALM, HIGH);
   }
   currTime += millis() - timeElapsed;
   currTime = currTime%TEMP_PERIOD;
@@ -617,10 +654,10 @@ void loop() {
   // Write weight output
   if (vRef >= 0) {
     digitalWrite(MOT_DIR, LOW);
-    digitalWrite(MOT_PWM, vRef);
+    analogWrite(MOT_PWM, vRef);
   }
   else if (vRef < 0) {
     digitalWrite(MOT_DIR, HIGH);
-    digitalWrite(MOT_PWM, abs(vRef));
+    analogWrite(MOT_PWM, abs(vRef));
   }
 }
