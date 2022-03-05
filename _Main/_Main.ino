@@ -3,13 +3,15 @@ FYDP-Group12
 -Main program for ThermoForce temperature/weight control
   -With MOT_DIR HIGH: CW-Anti Gravity, -ve Voltage Req. -ve Current Read
   -With MOT_DIR LOW: CCW-Gravity, +ve Voltage Req, +ve Current Read
+  -Shunt accurate to about +/-10% flat
+  -Loadcell accurate to about +/-15%, or +/-100g, whichever is larger
 *************************************************************/
 // Includes
 #include <Adafruit_BluefruitLE_UART.h>
 #include <Adafruit_ATParser.h>
 #include <Adafruit_BLEGatt.h>
 #include <Adafruit_BLE.h>
-#include <ADS1115_lite.h>
+#include <ADS1115_lite.h>  
 #include <HX711_ADC.h>
 #include "BluefruitConfig.h"
 
@@ -19,18 +21,6 @@ const bool DEBUG_PRINT = true;
 // BLE Const
 const uint8_t BLE_FAIL_MAX = 10;
 const String BLE_EMPTY_RX = "nodata";
-// Loadcell Const
-const uint8_t LDCL_DOUT = 18;
-const uint8_t LDCL_SCK = 9;
-const float LDCL_CAL = 0.73;
-// Motor Const
-const uint8_t MOT_BRK = 8;
-const uint8_t MOT_PWM = 11;
-const uint8_t MOT_DIR = 13;
-const uint8_t MOT_STICTION = 33;
-// Shunt/ADC Const
-const uint8_t SHUNT_MULT = 20; // 1/R
-const float ADC_VPER_CNT = 0.0078125; // mV
 // Resistive Heaters & Peltier Plate Const
 const uint8_t HTR_THMB = 42;
 const uint8_t HTR_INDX = 38;
@@ -49,41 +39,63 @@ const uint8_t THERM_CLR = 14;
 const uint8_t THERM_AMB = 15;
 // Temperature Const
 const uint8_t TEMP_MAX = 40;
-const uint8_t TEMP_MIN = 10;
+const uint8_t TEMP_MIN = 20;
 const uint16_t TEMP_PERIOD = 250; // Milliseconds
+// Loadcell Const
+const uint8_t LDCL_DOUT = 18;
+const uint8_t LDCL_SCK = 9;
+const float LDCL_CAL = 0.73;
+// Motor Const
+const uint8_t MOT_BRK = 8;
+const uint8_t MOT_PWM = 11;
+const uint8_t MOT_DIR = 13;
+const uint8_t MOT_STICTION = 1.55;
+// Shunt/ADC Const
+const uint8_t SHUNT_MULT = 20; // 1/R
+const float ADC_VPER_CNT = 0.0078125; // mV
 // Weight Control Const
+const uint8_t FUZZY_MASS_OFFSET = 100;
+const uint16_t FUZZY_CURR = 100;
+const uint16_t FUZZY_MASS = 200;
+const uint16_t MASS_MAX = 10000; // Grams
+const uint16_t MASS_MIN = 0; // Grams
 const float GRAM_GRAVITY = 0.981; // N/g
 const float SPOOL_RAD = 2.5; // cm
 const float TORQ_CONST = 1.2012439*10; // mA/Ncm
-const uint16_t MASS_MAX = 20000; // Grams
-const uint16_t MASS_MIN = 500; // Grams
 
 // Globals
 // BLE
 bool bleConnected = false;
 bool  bleHeartbeat = false;
 uint8_t bleCommFails = 0;
-// Loadcell
-float ldclGrams = 0;
-volatile boolean ldclMeasRdy = false;
-// Motor
-uint8_t motPWM = 0;
-// Shunt ADC
-uint16_t adcSSCnts = 0;
 // Temp Feedback
 bool htrOn = false;
 uint16_t tempOnTimes[6] = {0, 0, 0, 0, 0, 0};
 uint16_t currTime = 0;
 uint32_t timeElapsed = 0;
 float refTemp = 0;
+// Loadcell
+volatile boolean ldclMeasRdy = false;
+int16_t ldclGrams = 0;
+int16_t ldclGrams1 = 0;
+// Motor
+uint8_t motPWM = 0;
+// Shunt ADC
+uint16_t adcSSCnts = 0;
 // Weight Feedback
-float currErr = 0;
+bool firstLoop = true;
+bool motDirection = LOW;
+int16_t massDelta = 0;
+int16_t currErr = 0;
+int32_t currIntegralErr = 0;
+float uI1 = 0;
+float uL1 = 0;
 float refMass = 0;
 // Feedback Scaling
-float maxTemp = 0;
-float minTemp = 0;
-float maxMass = 0;
-float minMass = 0;
+int8_t minTemp = 0;
+int8_t maxTemp = 0;
+uint16_t minMass = 0;
+uint16_t maxMass = 0;
 
 // Constructors
 Adafruit_BluefruitLE_UART bleUART(BLUEFRUIT_HWSERIAL_NAME, BLUEFRUIT_UART_MODE_PIN);
@@ -205,7 +217,7 @@ bool setupShuntADC () {
 
   // Return
   adcSSCnts = adcCounts/10;
-  Serial.println("Avg current consumption: " + String(adcSSCnts*ADC_VPER_CNT*SHUNT_MULT) + "\r\n");
+  Serial.println("Avg current consumption (mA): " + String(adcSSCnts*ADC_VPER_CNT*SHUNT_MULT) + "\r\n");
   return true;
 }
 
@@ -351,6 +363,18 @@ void ldclReadyISR() {
     ldclMeasRdy = true;
 }
 
+
+// Linear Interpolation
+float linInterp(int x1, int x3, int y1, int y3, float x) {
+  float y2 = (1.0*y1/(x3 - x1))*(1.0*(x3 - x)) + (1.0*y3/(x1-x3))*(1.0*(x1 - x));
+  if (y2 > y3)
+    return y3;
+  else if (y2 < y1)
+    return y1;
+  else
+    return y2;
+}
+
 // Volt to Temp
 float voltToTemp(uint8_t pinNum) {
   // Read pin, convert, return
@@ -371,6 +395,7 @@ int16_t voltToPWM(float voltage) {
   else
     return (256*voltage/12)-1;
 }
+
 
 // Setup 
 void setup() {
@@ -411,10 +436,11 @@ void setup() {
 }
 
 // Main
-void loop() { 
+void loop() {
+  /* **********BLUETOOTH********** */
   // Read BLE
-  String cmdLine = bleRX();
-  //String cmdLine = "-min -t -10 -max -t 50 -min -w 2 -max -w 10 -t 25";
+//  String cmdLine = bleRX();
+  String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
   if (DEBUG_PRINT)
     Serial.println("***Bluetooth Values***");
   if (cmdLine != BLE_EMPTY_RX) {
@@ -467,7 +493,7 @@ void loop() {
             setTemp = false;
           }
           else {
-            refTemp = (String(currToken).toFloat()-minTemp)*(1.0*(TEMP_MAX-TEMP_MIN)/(maxTemp-minTemp)) + TEMP_MIN;
+            refTemp = linInterp(minTemp, maxTemp, TEMP_MIN, TEMP_MAX, String(currToken).toFloat());
             setTemp = false;
           }
         }
@@ -486,7 +512,7 @@ void loop() {
             if (String(currToken).toInt() == 0)
               refMass = 0;
             else
-              refMass = (String(currToken).toFloat()-minMass)*(1.0*(MASS_MAX-MASS_MIN)/(maxMass-minMass)) + MASS_MIN;
+              refMass = linInterp(minMass, maxMass, MASS_MIN, MASS_MAX, String(currToken).toFloat());
             setMass = false;
           }
         }
@@ -508,21 +534,22 @@ void loop() {
   // Send heartbeat
   bleCommFails = (bleTX(String(bleHeartbeat)) == false) ? (bleCommFails + 1) : 0;
   bleHeartbeat = !bleHeartbeat;
-  if (bleCommFails >= BLE_FAIL_MAX)
-    failSafe();
-  
+//  if (bleCommFails >= BLE_FAIL_MAX)
+//    failSafe();
+
+  /* **********TEMPERATURE CONTROL********** */
   // Read temperature sensors
-  float handTemps[6];
-  float midl1Temp = voltToTemp(THERM_MIDL1);
-  float midl2Temp = voltToTemp(THERM_MIDL2);
+  int8_t handTemps[6];
+  int8_t midl1Temp = voltToTemp(THERM_MIDL1);
+  int8_t midl2Temp = voltToTemp(THERM_MIDL2);
   handTemps[0] = voltToTemp(THERM_THMB);
   handTemps[1] = voltToTemp(THERM_INDX);
   handTemps[2] = 0.5*(midl1Temp+midl2Temp);
   handTemps[3] = voltToTemp(THERM_PNKY);
   handTemps[4] = voltToTemp(THERM_PALM);
-  float clrTemp = voltToTemp(THERM_CLR);
-  float ambTemp = voltToTemp(THERM_AMB); // UNUSED
-  float avgTemp = (1.0/6.0)*(handTemps[0]+handTemps[1]+handTemps[2]+handTemps[3]+handTemps[4]+clrTemp);
+  int8_t clrTemp = voltToTemp(THERM_CLR);
+  int8_t ambTemp = voltToTemp(THERM_AMB); // UNUSED
+  int8_t avgTemp = (1.0/6.0)*(handTemps[0]+handTemps[1]+handTemps[2]+handTemps[3]+handTemps[4]+clrTemp);
   if (DEBUG_PRINT) {
     Serial.println("***Thermistor Values***");
     Serial.println("Thumb(degC): " + String(handTemps[0]));
@@ -535,19 +562,7 @@ void loop() {
     Serial.println("Ambient(degC): " + String(ambTemp));
     Serial.println("Average(degC): " + String(avgTemp) + "\r\n");
   }
-  
-  // Read weight feedback sensors
-  if (ldclMeasRdy) {
-    ldclGrams = ldclADC.getData();
-    ldclMeasRdy = false;
-  }
-  float currMilliAmps = digitalRead(MOT_DIR) == LOW ? currMeasSmoothed() : -currMeasSmoothed();
-  if (DEBUG_PRINT) {
-    Serial.println("***Weight Feedback Values***");
-    Serial.println("Loadcell(g): " + String(ldclGrams));
-    Serial.println("Current(mA): " + String(currMilliAmps)+ "\r\n");
-  }
-  
+
   // Calculate temperature control signals
   htrOn = (refTemp >= avgTemp) ? true : false; // Heating or cooling
   if (htrOn) { // Calculate heater control signals
@@ -555,9 +570,9 @@ void loop() {
     for (int i=0; i < 5; i++) {
       tempErr[i] = refTemp - handTemps[i];
       if (tempErr[i] >= 0)
-        tempOnTimes[i] += 10*tempErr[i];
+        tempOnTimes[i] += 3*tempErr[i];
       else if (tempErr[i] < 0)
-        tempOnTimes[i] += 50*tempErr[i];
+        tempOnTimes[i] -= 8*tempErr[i];
       if (tempOnTimes[i] > TEMP_PERIOD)
         tempOnTimes[i] = TEMP_PERIOD;
     }
@@ -591,23 +606,7 @@ void loop() {
     Serial.println("Palm: " + String(tempOnTimes[4]));
     Serial.println("Cooler: " + String(tempOnTimes[5]) + "\r\n");
   }
-  
-  // Calculate weight control signals
-  float refCurr = refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST;
-  currErr += refCurr - currMilliAmps;
-  float vCtrl = 2.5*currErr/1000;
-  if (vCtrl < 0 && vCtrl > -MOT_STICTION)
-    vCtrl -= 1;
-  else if (vCtrl > 0 && vCtrl < MOT_STICTION)
-    vCtrl += 1;
-  int16_t vRef = voltToPWM(2.5*currErr/1000);
-  if (DEBUG_PRINT) {
-    Serial.println("***Weight Feedback Signals***");
-    Serial.println("Ref Current(mA): " + String(refCurr));
-    Serial.println("Current Error: " + String(currErr));
-    Serial.println("PWM Signal: " + String(vRef));
-  }
-  
+
   // Write temperature output
   if (htrOn) {
     if (currTime < tempOnTimes[0] && handTemps[0] < TEMP_MAX) // Thumb
@@ -647,17 +646,158 @@ void loop() {
   currTime = currTime%TEMP_PERIOD;
   timeElapsed = millis();
   if (DEBUG_PRINT) {
-    Serial.println("***Temp Control Output***");
-    Serial.println("Current Time: " + String(tempOnTimes[0]) + "\r\n");
+    Serial.println("***Temp Control Time***");
+    Serial.println("Current Time: " + String(currTime) + "\r\n");
+  }
+
+  /* **********WEIGHT CONTROL********** */
+  // Read weight feedback sensors
+  float currMilliAmps = (motDirection == LOW) ? currMeasSmoothed() : -currMeasSmoothed();
+  currErr = refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST - currMilliAmps;
+  if (ldclMeasRdy) {
+    ldclGrams1 = ldclGrams;
+    ldclGrams = ldclADC.getData();
+    if (ldclGrams < 0)
+      ldclGrams = 0;
+    massDelta = (firstLoop == false) ? ldclGrams1 - ldclGrams : 0;
+    ldclMeasRdy = false;
+  }
+  if (DEBUG_PRINT) {
+    Serial.println("***Weight Feedback Values***");
+    Serial.println("Current(mA): " + String(currMilliAmps));
+    Serial.println("Current Error: " + String(currErr));
+    Serial.println("Loadcell(g): " + String(ldclGrams));
+    Serial.println("Loadcell Past(g): " + String(ldclGrams1));
+    Serial.println("LDCL Error: " + String(massDelta)+ "\r\n");
+  }
+
+  // Fuse weight measurements w/ fuzzy logic
+  float currR = 0, currS = 0, currD = 0;
+  float ldclR = 0, ldclS = 0, ldclD = 0;
+  float uI = uI1, uL = uI1, uIBar = uI1;
+  if (currErr <= -FUZZY_CURR) {
+    currR = 1;
+    currS = 0;
+    currD = 0;
+  }
+  else if ((-FUZZY_CURR < currErr) && (currErr  <= 0)) {
+    currR = -1.0*currErr/FUZZY_CURR;
+    currS = 1.0*(currErr+FUZZY_CURR)/FUZZY_CURR;
+    currD = 0;
+  }
+  else if ((0 < currErr) && (currErr < FUZZY_CURR)) {
+    currR = 0;
+    currS = 1.0*(FUZZY_CURR-currErr)/FUZZY_CURR;
+    currD = 1.0*currErr/FUZZY_CURR;
+  }
+  else {  // currIntegralErr >= FUZZY_CUR
+    currR = 0;
+    currS = 0;
+    currD = 1;
+  }
+  if (massDelta <= -2*FUZZY_MASS) {
+    ldclR = 1;
+    ldclS = 0;
+    ldclD = 0;
+  }
+  else if ((-2*FUZZY_MASS < massDelta) && (massDelta <= 0)) {
+    ldclR = -1.0*massDelta/(2*FUZZY_MASS);
+    ldclS = 1.0*(massDelta+2*FUZZY_MASS)/(2*FUZZY_MASS);
+    ldclD = 0;
+  }
+  else if ((0 < massDelta) && (massDelta < FUZZY_MASS)) {
+    ldclR = 0;
+    ldclS = 1.0*(FUZZY_MASS-massDelta)/FUZZY_MASS;
+    ldclD = 1.0*massDelta/FUZZY_MASS;
+  }
+  else { // massDelta >= FUZZY_MASS
+    ldclR = 0;
+    ldclS = 0;
+    ldclD = 1;
+  }
+  if ((currR < currS) && (currR > currD))
+    uI = -currR;
+  else if ((currD > currR) && (currD > currS))
+    uI = currS;
+  else // (currD > currR) && currD > currS
+    uI = currD;
+  if ((ldclR > ldclS) && (ldclR > ldclD))
+    uL = -ldclR;
+  else if ((ldclS > ldclR) && (ldclS > ldclD))
+    uL = ldclS;
+  else // (ldclD > ldclR) && ldclD > ldclS
+    uL = ldclD;
+  float trueDir = 0.1*uI1 + 0.3*uI + 0.2*uL1 + 0.4*uL;
+  if (trueDir < 0)
+    digitalWrite(MOT_DIR, HIGH); // Raising
+  else if (trueDir > 0)
+    digitalWrite(MOT_DIR, LOW); // Stationary or Lowering
+  if (DEBUG_PRINT) {
+    Serial.println("***Weight Feedback Fuzzy Logic***");
+    Serial.println("Current Raise: " + String(currR));
+    Serial.println("Current Stationary: " + String(currS));
+    Serial.println("Current Drop: " + String(currD));
+    Serial.println("LDCL Raise: " + String(ldclR));
+    Serial.println("LDCL Stationary: " + String(ldclS));
+    Serial.println("LDCL Drop: " + String(ldclD));
+    Serial.println("Fuzzy Current Previous: " + String(uI1));
+    Serial.println("Fuzzy Current: " + String(uI));
+    Serial.println("Fuzzy Current Avg: " + String(uIBar));
+    Serial.println("Fuzzy LDCL: " + String(uL));
+    Serial.println("Fuzzy Sel Direction: " + String(trueDir));
+    Serial.println("Selected Motor Dir (High-CW, Low-CCW): " + String(digitalRead(MOT_DIR)) + "\r\n");
+  }
+      
+  // Calculate weight control signals
+  bool motDirCurrent = digitalRead(MOT_DIR);
+  int16_t vRef = 0;
+  if (motDirCurrent == 0) { // counter-clockwise
+    currIntegralErr += currErr;
+    float vCtrl = 2.5*currIntegralErr/1000;
+    if ((vCtrl < 0) && (vCtrl > -MOT_STICTION))
+      vCtrl -= 0.5;
+    else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
+      vCtrl += 0.5;
+    if (vCtrl > 12)
+      vCtrl = 12;
+    else if (vCtrl < -12)
+      vCtrl = -12;
+    vRef = voltToPWM(vCtrl);
+    if (DEBUG_PRINT) {
+      Serial.println("***Weight Feedback Signals***");
+      Serial.println("Current Integrated Error: " + String(currIntegralErr));
+      Serial.println("Requested Voltage: " + String(vCtrl));
+      Serial.println("PWM Signal: " + String(vRef) + "\r\n");
+    }
+  }
+  else { // clockwise - MAKE CONTROLLER FOR THIS CASE 
+    float vCtrl = 2;
+    if ((vCtrl < 0) && (vCtrl > -MOT_STICTION))
+      vCtrl -= 0.25;
+    else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
+      vCtrl += 0.25;
+    if (vCtrl > 12)
+      vCtrl = 12;
+    else if (vCtrl < -12)
+      vCtrl = -12;
+    vRef = voltToPWM(vCtrl);
+    if (DEBUG_PRINT) {
+      Serial.println("***Weight Feedback Signals***");
+      Serial.println("Requested Voltage: " + String(vCtrl));
+      Serial.println("PWM Signal: " + String(vRef) + "\r\n");
+    }
   }
   
   // Write weight output
-  if (vRef >= 0) {
-    digitalWrite(MOT_DIR, LOW);
+  if (vRef >= 0)
     analogWrite(MOT_PWM, vRef);
-  }
-  else if (vRef < 0) {
-    digitalWrite(MOT_DIR, HIGH);
+  else if (vRef < 0)
     analogWrite(MOT_PWM, abs(vRef));
-  }
+  analogWrite(MOT_PWM, 0);
+  
+  // Save values for next loop
+  firstLoop = false;
+  uI1 = uI;
+  uL1 = uL;
+  motDirection = motDirCurrent;
 }
