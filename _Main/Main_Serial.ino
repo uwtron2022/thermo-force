@@ -7,8 +7,9 @@ FYDP-Group12
   -Loadcell accurate to about +/-15%, or +/-100g, whichever is larger
 *************************************************************/
 // Includes
-#include "ADS1115_lite.h"
+#include "ADS1115_lite.h"  
 #include <HX711_ADC.h>
+#include "BluefruitConfig.h"
 
 // Constants
 const int16_t BAUDRATE = 9600;
@@ -20,7 +21,7 @@ const String BLE_EMPTY_RX = "nodata";
 const uint8_t HTR_THMB = 42;
 const uint8_t HTR_INDX = 38;
 const uint8_t HTR_MIDL = 30; // Middle two fingers
-const ;uint8_t HTR_PNKY = 26;
+const uint8_t HTR_PNKY = 26;
 const uint8_t HTR_PALM = 34;
 const uint8_t PELT_CLR = 22;
 // Thermistor Const
@@ -87,16 +88,46 @@ float uI1 = 0;
 float uL1 = 0;
 float refMass = 0;
 // Feedback Scaling
-int8_t minTemp = 0; 
-int8_t maxTemp = 0; 
+int8_t minTemp = 0;
+int8_t maxTemp = 0;
 uint16_t minMass = 0;
-uint16_t maxMass = 0; 
+uint16_t maxMass = 0;
 
 // Constructors
 HX711_ADC ldclADC(LDCL_DOUT, LDCL_SCK);
 ADS1115_lite shuntADC(ADS1115_DEFAULT_ADDRESS);
 
-/*
+// BLE Initalize
+bool setupBLE () { // Serial2 used to communicate w/ BLE module
+  // Initialize peripheral
+  /*Serial.println("##########Initialize BLE##########");
+  if (!bleUART.begin()) {
+    Serial.println("Failed to bgein BLE Module\r\n");
+    return false;
+  }
+
+  // Setup peripheral
+  Serial.println("BLE begin ok, disable verbose, disable echo, request info");
+  while (!bleUART.echo(false) == "OK") {} // Wait for response
+  bleUART.verbose(VERBOSE_MODE);
+  bleUART.info();
+  Serial.println();
+
+  // Connect, set connected flag
+  while (!bleUART.isConnected()) {
+    Serial.println("Waiting for BLE connection");
+    delay(1000);
+  }
+
+  // Setup connection parameters
+  bleUART.println("AT+GAPDEVNAME=FYDP_GROUP12");
+  
+  Serial.println("BLE connected");
+  Serial.println("BLE initialized\r\n");
+  bleConnected = true;
+  return true;*/
+}
+
 // LDCL Initialize
 bool setupLDCL () {
   // Initialize peripheral
@@ -106,7 +137,7 @@ bool setupLDCL () {
   uint16_t ldclStabilTime = 5000;
   bool ldclTare = true;
   ldclADC.begin();
-
+ 
   // Setup peripheral
   ldclADC.start(ldclStabilTime, ldclTare);
   if (ldclADC.getTareTimeoutFlag()) {
@@ -135,7 +166,7 @@ bool setupMOTShield () {
   analogWrite(MOT_PWM, 0);
 
   // Setup Non-Audible Fast PWM Frequency 31372.55 Hz
-  //  // Bit7,5,3=1 & Bit6,4,2=0 for Non-Inverting PWM, Bit1=0 & Bit0=1 for Fast PWM Mode
+  //  // Bit7,5,3=1 & Bit6,4,2=0 for Non-Inverting PWM, Bit1=0 & Bit0=1 for Fast PWM Mode 
   //  TCCR1A = 0;
   //  TCCR1A = 0b10101000 | 0b00000001;
   //  // Bit4=0 & Bit3=1 for Fast PWM Mode, Bit1=1 for No Prescaling
@@ -197,7 +228,7 @@ bool setupHeatCool() {
   pinMode(HTR_PNKY, OUTPUT);
   pinMode(HTR_PALM, OUTPUT);
   pinMode(PELT_CLR, OUTPUT);
-  // turn off all heaters and coolers
+  // turn off all heaters and coolers 
   digitalWrite(HTR_THMB, HIGH);
   digitalWrite(HTR_INDX, HIGH);
   digitalWrite(HTR_MIDL, HIGH);
@@ -249,8 +280,7 @@ void failSafe() {
   Serial.println("##########PROGRAM STOPPED##########");
   while(true) {};
 }
-*/
-// BLE Rx
+
 String bleRX() {
   // Check for incoming char
   if(Serial.available()){
@@ -278,7 +308,7 @@ bool bleTX(String msg) {
   }
   return false;
 }
-/*
+
 // 5Pt Current Measurement
 float currMeasSmoothed() {
   // Read and average current counts
@@ -314,7 +344,7 @@ void ldclReadyISR() {
     ldclMeasRdy = true;
 }
 
-*/
+
 // Linear Interpolation
 float linInterp(int x1, int x3, int y1, int y3, float x) {
   float y2 = (1.0*y1/(x3 - x1))*(1.0*(x3 - x)) + (1.0*y3/(x1-x3))*(1.0*(x1 - x));
@@ -325,7 +355,7 @@ float linInterp(int x1, int x3, int y1, int y3, float x) {
   else
     return y2;
 }
-/*
+
 // Volt to Temp
 float voltToTemp(uint8_t pinNum) {
   // Read pin, convert, return
@@ -346,9 +376,9 @@ int16_t voltToPWM(float voltage) {
   else
     return (256*voltage/12)-1;
 }
-*/
 
-// Setup
+
+// Setup 
 void setup() {
   // Initialize serial
   Serial.begin(BAUDRATE);
@@ -356,14 +386,14 @@ void setup() {
   Serial.println("##########Initialize Serial##########");
   Serial.println("Serial Initialized\r\n");
 
-  // Initialize peripherals/() 
-  /*
+  // Initialize peripherals
+  bool bleSuccess = setupBLE();
   bool ldclSuccess = setupLDCL();
   bool motSuccess = setupMOTShield();
   bool shuntSuccess = setupShuntADC();
   bool heatCoolSuccess = setupHeatCool();
   bool thermistorSuccess = setupThermistors();
-  if (!(ldclSuccess && shuntSuccess && heatCoolSuccess && thermistorSuccess)) {
+  if (!(bleSuccess && ldclSuccess && shuntSuccess && heatCoolSuccess && thermistorSuccess)) {
     if(!bleSuccess)
        Serial.println("***BLE INITIALIZATION FAIL***\r\n");
     if(!ldclSuccess)
@@ -374,8 +404,8 @@ void setup() {
        Serial.println("***HEATERS/COOLER INITIALIZATION FAIL***\r\n");
     if(!thermistorSuccess)
        Serial.println("***THERMISTOR INITIALIZATION FAIL***\r\n");
-    //    while(true) {};
-  }*/
+//    while(true) {};
+  }
 
   // Flush
   Serial.flush();
@@ -388,10 +418,10 @@ void setup() {
 
 // Main
 void loop() {
-  /* **********COMMS********** */
-  // Read Serial
-  //String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
+  /* **********BLUETOOTH********** */
+  // Read BLE
   String cmdLine = bleRX();
+  //String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
   if (DEBUG_PRINT)
     Serial.println("***Bluetooth Values***");
   if (cmdLine != BLE_EMPTY_RX) {
@@ -474,7 +504,6 @@ void loop() {
     }
   }
   if (DEBUG_PRINT) {
-   // use for serial monitor output
     Serial.println("Min Temp: " + String(minTemp));
     Serial.println("Max Temp: " + String(maxTemp));
     Serial.println("Ref Temp: " + String(refTemp));
@@ -482,14 +511,16 @@ void loop() {
     Serial.println("Max Mass: " + String(maxMass));
     Serial.println("Ref Mass: " + String(refMass) + "\r\n");
   }
-
+  
+  // Send heartbeat
+  bleCommFails = (bleTX(String(bleHeartbeat)) == false) ? (bleCommFails + 1) : 0;
+  bleHeartbeat = !bleHeartbeat;
 //  if (bleCommFails >= BLE_FAIL_MAX)
 //    failSafe();
-  
-  
+
   /* **********TEMPERATURE CONTROL********** */
   // Read temperature sensors
-  /*int8_t handTemps[6];
+  int8_t handTemps[6];
   int8_t midl1Temp = voltToTemp(THERM_MIDL1);
   int8_t midl2Temp = voltToTemp(THERM_MIDL2);
   handTemps[0] = voltToTemp(THERM_THMB);
@@ -512,33 +543,33 @@ void loop() {
     Serial.println("Ambient(degC): " + String(ambTemp));
     Serial.println("Average(degC): " + String(avgTemp) + "\r\n");
   }
-  
+
   // Calculate temperature control signals
   htrOn = (refTemp >= avgTemp) ? true : false; // Heating or cooling
   if (htrOn) { // Calculate heater control signals
     float tempErr[5];
     for (int i=0; i < 5; i++) {
       tempErr[i] = refTemp - handTemps[i];
-      if (tempErr[i] >= 0) 
+      if (tempErr[i] >= 0)
         tempOnTimes[i] += 3*tempErr[i];
       else if (tempErr[i] < 0)
         tempOnTimes[i] -= 8*tempErr[i];
       if (tempOnTimes[i] > TEMP_PERIOD)
         tempOnTimes[i] = TEMP_PERIOD;
     }
-
+    
     // Turn cooler off
     tempOnTimes[5] = 0;
   }
   else if (!htrOn) { // Calculate cooler control signal
     float tempErr = refTemp - avgTemp;
     if (tempErr <= 0)
-      tempOnTimes[5] -= 10*tempErr;
+      tempOnTimes[5] -= 10*tempErr; 
     else if (tempErr > 0)
       tempOnTimes[5] -= 25*tempErr;
     if (tempOnTimes[5] > TEMP_PERIOD)
       tempOnTimes[5] = TEMP_PERIOD;
-
+      
     // Turn heaters off
     tempOnTimes[0] = 0;
     tempOnTimes[1] = 0;
@@ -556,6 +587,7 @@ void loop() {
     Serial.println("Palm: " + String(tempOnTimes[4]));
     Serial.println("Cooler: " + String(tempOnTimes[5]) + "\r\n");
   }
+
   // Write temperature output
   if (htrOn) {
     if (currTime < tempOnTimes[0] && handTemps[0] < TEMP_MAX) // Thumb
@@ -599,7 +631,7 @@ void loop() {
     Serial.println("Current Time: " + String(currTime) + "\r\n");
   }
 
-  /* **********WEIGHT CONTROL********** 
+  /* **********WEIGHT CONTROL********** */
   // Read weight feedback sensors
   float currMilliAmps = (motDirection == LOW) ? currMeasSmoothed() : -currMeasSmoothed();
   currErr = refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST - currMilliAmps;
@@ -696,7 +728,7 @@ void loop() {
     Serial.println("Fuzzy Sel Direction: " + String(trueDir));
     Serial.println("Selected Motor Dir (High-CW, Low-CCW): " + String(digitalRead(MOT_DIR)) + "\r\n");
   }
-
+      
   // Calculate weight control signals
   bool motDirCurrent = digitalRead(MOT_DIR);
   int16_t vRef = 0;
@@ -719,7 +751,7 @@ void loop() {
       Serial.println("PWM Signal: " + String(vRef) + "\r\n");
     }
   }
-  else { // clockwise - MAKE CONTROLLER FOR THIS CASE
+  else { // clockwise - MAKE CONTROLLER FOR THIS CASE 
     float vCtrl = 2;
     if ((vCtrl < 0) && (vCtrl > -MOT_STICTION))
       vCtrl -= 0.25;
@@ -736,18 +768,17 @@ void loop() {
       Serial.println("PWM Signal: " + String(vRef) + "\r\n");
     }
   }
-
+  
   // Write weight output
   if (vRef >= 0)
     analogWrite(MOT_PWM, vRef);
   else if (vRef < 0)
     analogWrite(MOT_PWM, abs(vRef));
   analogWrite(MOT_PWM, 0);
-
+  
   // Save values for next loop
   firstLoop = false;
   uI1 = uI;
   uL1 = uL;
   motDirection = motDirCurrent;
-  */
 }
