@@ -62,7 +62,6 @@ const uint16_t MASS_MIN = 0; // Grams
 const float GRAM_GRAVITY = 0.981; // N/g
 const float SPOOL_RAD = 2.5; // cm
 const float TORQ_CONST = 1.2012439*10; // mA/Ncm
-const float FUZZY_DEADBAND = 0.25;
 
 // Globals
 // BLE
@@ -87,7 +86,6 @@ uint16_t adcSSCnts = 0;
 bool firstLoop = true;
 bool motDirection = LOW;
 int16_t massDelta = 0;
-int16_t massDelta1 = 0;
 int16_t currErr = 0;
 int32_t currIntegralErr = 0;
 float uI1 = 0;
@@ -574,7 +572,7 @@ void loop() {
       if (tempErr[i] >= 0)
         tempOnTimes[i] += 3*tempErr[i];
       else if (tempErr[i] < 0)
-        tempOnTimes[i] += 8*tempErr[i];
+        tempOnTimes[i] -= 8*tempErr[i];
       if (tempOnTimes[i] > TEMP_PERIOD)
         tempOnTimes[i] = TEMP_PERIOD;
     }
@@ -730,12 +728,10 @@ void loop() {
   else // (ldclD > ldclR) && ldclD > ldclS
     uL = ldclD;
   float trueDir = 0.1*uI1 + 0.3*uI + 0.2*uL1 + 0.4*uL;
-  if (abs(trueDur) > FUZZY_DEADBAND) {
-    if (trueDir < 0)
-      digitalWrite(MOT_DIR, HIGH); // Raising
-    else if (trueDir > 0)
-      digitalWrite(MOT_DIR, LOW); // Stationary or Lowering
-  }
+  if (trueDir < 0)
+    digitalWrite(MOT_DIR, HIGH); // Raising
+  else if (trueDir > 0)
+    digitalWrite(MOT_DIR, LOW); // Stationary or Lowering
   if (DEBUG_PRINT) {
     Serial.println("***Weight Feedback Fuzzy Logic***");
     Serial.println("Current Raise: " + String(currR));
@@ -762,6 +758,10 @@ void loop() {
       vCtrl -= 0.5;
     else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
       vCtrl += 0.5;
+    if (vCtrl > 12)
+      vCtrl = 12;
+    else if (vCtrl < -12)
+      vCtrl = -12;
     vRef = voltToPWM(vCtrl);
     if (DEBUG_PRINT) {
       Serial.println("***Weight Feedback Signals***");
@@ -770,13 +770,16 @@ void loop() {
       Serial.println("PWM Signal: " + String(vRef) + "\r\n");
     }
   }
-  else { // clockwise - MAKE CONTROLLER FOR THIS CASE
-    float massScalar = 1.2-(1.0*(refMass-MASS_MIN)/(MASS_MAX-MASS_MIN));
-    float vCtrl = 2.5*massScalar*(massDelta-massDelta1);
+  else { // clockwise - MAKE CONTROLLER FOR THIS CASE 
+    float vCtrl = 2;
     if ((vCtrl < 0) && (vCtrl > -MOT_STICTION))
       vCtrl -= 0.25;
     else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
       vCtrl += 0.25;
+    if (vCtrl > 12)
+      vCtrl = 12;
+    else if (vCtrl < -12)
+      vCtrl = -12;
     vRef = voltToPWM(vCtrl);
     if (DEBUG_PRINT) {
       Serial.println("***Weight Feedback Signals***");
@@ -797,5 +800,4 @@ void loop() {
   uI1 = uI;
   uL1 = uL;
   motDirection = motDirCurrent;
-  massDelta1 = massDelta;
 }
