@@ -14,7 +14,7 @@ ADS1115 lite library - Adapted from adafruit ADS1015/ADS1115 library
 			a. Most notably the incorrect sample rate used when using the ADS1115.  Yes that's right, if you used the Adafruit library the sample rate was set to the fastest, noisiest sample rate by default with no way to change it!  Opps!
 		8. Proper ifndef added to prevent multiple calls
 		9. Removed explicit delays and intead poll the Operational Status bit (conversion done)
-		 
+
 	https://github.com/terryjmyers/ADS1115-Lite.Git
     v1.0 - First release
 */
@@ -93,11 +93,11 @@ class ADS1115_lite
 	public:
 		ADS1115_lite(uint8_t i2cAddress = ADS1115_DEFAULT_ADDRESS);
 		bool	testConnection(); //returns 1 if ADS1115 is properly connected, 0 if not connected.  There is no point in calling any other function is this doesn't return a 1
-		
+
 		void	setGain(uint16_t gain); //Sets protected property and immediatly returns
 		void	setMux(uint16_t mux); //Sets Sets protected property and immediatly returns
 		void	setSampleRate(uint8_t rate); //Sets Sets protected property and immediatly returns: sample rate
-		
+
 		void	triggerConversion(void); //Triggers a single conversion with currently configured settings in protected variables.  Immediately returns
 		bool	isConversionDone(); //Polls ADS1115 for the conversion done register.  Returns 1 if conversion is finished, 0 if in the middle of conversion.
 		int16_t	getConversion(); //Polls ADS1115 for the conversion done register.  Waits until it is finished and returns value.
