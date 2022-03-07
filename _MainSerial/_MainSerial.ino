@@ -391,8 +391,8 @@ void setup() {
 void loop() {
   /* **********BLUETOOTH********** */
   // Read Serial
-  //String cmdLine = serialRX();
-  String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
+  String cmdLine = serialRX();
+  //String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
   if (DEBUG_PRINT)
   Serial.println("***Serial Values***");
   if (cmdLine != SERIAL_EMPTY_RX) {
