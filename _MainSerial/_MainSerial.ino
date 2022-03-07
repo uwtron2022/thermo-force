@@ -195,19 +195,20 @@ bool setupHeatCool() {
   Serial.println("##########Initialize Heaters/Cooler##########");
 
   // Set pinMode
-  pinMode(HTR_THMB, OUTPUT);
-  pinMode(HTR_INDX, OUTPUT);
-  pinMode(HTR_MIDL, OUTPUT);
-  pinMode(HTR_PNKY, OUTPUT);
-  pinMode(HTR_PALM, OUTPUT);
-  pinMode(PELT_CLR, OUTPUT);
-  // turn off all heaters and coolers 
-  digitalWrite(HTR_THMB, HIGH);
-  digitalWrite(HTR_INDX, HIGH);
-  digitalWrite(HTR_MIDL, HIGH);
-  digitalWrite(HTR_PNKY, HIGH);
-  digitalWrite(HTR_PALM, HIGH);
-  digitalWrite(PELT_CLR, HIGH);
+//  pinMode(HTR_THMB, OUTPUT);
+//  pinMode(HTR_INDX, OUTPUT);
+//  pinMode(HTR_MIDL, OUTPUT);
+//  pinMode(HTR_PNKY, OUTPUT);
+//  pinMode(HTR_PALM, OUTPUT);
+//  pinMode(PELT_CLR, OUTPUT);
+  
+  // Turn off
+//  digitalWrite(HTR_THMB, HIGH);
+//  digitalWrite(HTR_INDX, HIGH);
+//  digitalWrite(HTR_MIDL, HIGH);
+//  digitalWrite(HTR_PNKY, HIGH);
+//  digitalWrite(HTR_PALM, HIGH);
+//  digitalWrite(PELT_CLR, HIGH);
 
   // Success
   Serial.println("Heaters/Cooler initialized\r\n");
@@ -220,14 +221,14 @@ bool setupThermistors() {
   Serial.println("##########Initialize Thermistors##########");
 
   // Set pinMode
-  pinMode(THERM_THMB, INPUT);
-  pinMode(THERM_INDX, INPUT);
-  pinMode(THERM_MIDL1, INPUT);
-  pinMode(THERM_MIDL2, INPUT);
-  pinMode(THERM_PNKY, INPUT);
-  pinMode(THERM_PALM, INPUT);
-  pinMode(THERM_CLR, INPUT);
-  pinMode(THERM_AMB, INPUT);
+//  pinMode(THERM_THMB, INPUT);
+//  pinMode(THERM_INDX, INPUT);
+//  pinMode(THERM_MIDL1, INPUT);
+//  pinMode(THERM_MIDL2, INPUT);
+//  pinMode(THERM_PNKY, INPUT);
+//  pinMode(THERM_PALM, INPUT);
+//  pinMode(THERM_CLR, INPUT);
+//  pinMode(THERM_AMB, INPUT);
 
   // Success
   Serial.println("Thermistors initialized\r\n");
@@ -390,8 +391,8 @@ void setup() {
 void loop() {
   /* **********BLUETOOTH********** */
   // Read Serial
-  String cmdLine = serialRX();
-  //String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
+  //String cmdLine = serialRX();
+  String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
   if (DEBUG_PRINT)
   Serial.println("***Serial Values***");
   if (cmdLine != SERIAL_EMPTY_RX) {
@@ -706,7 +707,7 @@ void loop() {
   // Calculate weight control signals
   int16_t currSetpoint = (motDirection == LOW) ? refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST : 0;
   currIntegralErr += (motDirection == LOW) ? (currSetpoint-motCurr) : (currSetpoint+motCurr);
-  float vCtrl = (motDirection == LOW) ? (1.0*currSetpoint/1000)*(1.0*currIntegralErr/1000) : 1;
+  float vCtrl = (motDirection == LOW) ? 10*(currIntegralErr/1000) : 1.3;
   if ((vCtrl < 0) && (vCtrl > -MOT_STICTION))
     vCtrl -= 0.1;
   else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
