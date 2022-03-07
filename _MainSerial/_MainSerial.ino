@@ -704,9 +704,9 @@ void loop() {
   }
       
   // Calculate weight control signals
-  int16_t currSetpoint = (motDirection == LOW) ? refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST : -(1-(refMass-MASS_MIN)/(MASS_MAX-MASS_MIN))*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST;
+  int16_t currSetpoint = (motDirection == LOW) ? refMass*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST : 0;
   currIntegralErr += (motDirection == LOW) ? (currSetpoint-motCurr) : (currSetpoint+motCurr);
-  float vCtrl = (1.0*currSetpoint/1000)*(1.0*currIntegralErr/1000);
+  float vCtrl = (motDirection == LOW) ? (1.0*currSetpoint/1000)*(1.0*currIntegralErr/1000) : 1;
   if ((vCtrl < 0) && (vCtrl > -MOT_STICTION))
     vCtrl -= 0.1;
   else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
