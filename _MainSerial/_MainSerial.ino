@@ -191,47 +191,47 @@ bool setupShuntADC () {
 
 // Heater/Cooler Initialization
 bool setupHeatCool() {
-//  // Start
-//  Serial.println("##########Initialize Heaters/Cooler##########");
-//
-//  // Set pinMode
-//  pinMode(HTR_THMB, OUTPUT);
-//  pinMode(HTR_INDX, OUTPUT);
-//  pinMode(HTR_MIDL, OUTPUT);
-//  pinMode(HTR_PNKY, OUTPUT);
-//  pinMode(HTR_PALM, OUTPUT);
-//  pinMode(PELT_CLR, OUTPUT);
-//  // turn off all heaters and coolers 
-//  digitalWrite(HTR_THMB, HIGH);
-//  digitalWrite(HTR_INDX, HIGH);
-//  digitalWrite(HTR_MIDL, HIGH);
-//  digitalWrite(HTR_PNKY, HIGH);
-//  digitalWrite(HTR_PALM, HIGH);
-//  digitalWrite(PELT_CLR, HIGH);
-//
-//  // Success
-//  Serial.println("Heaters/Cooler initialized\r\n");
-//  return true;
+  // Start
+  Serial.println("##########Initialize Heaters/Cooler##########");
+
+  // Set pinMode
+  pinMode(HTR_THMB, OUTPUT);
+  pinMode(HTR_INDX, OUTPUT);
+  pinMode(HTR_MIDL, OUTPUT);
+  pinMode(HTR_PNKY, OUTPUT);
+  pinMode(HTR_PALM, OUTPUT);
+  pinMode(PELT_CLR, OUTPUT);
+  // turn off all heaters and coolers 
+  digitalWrite(HTR_THMB, HIGH);
+  digitalWrite(HTR_INDX, HIGH);
+  digitalWrite(HTR_MIDL, HIGH);
+  digitalWrite(HTR_PNKY, HIGH);
+  digitalWrite(HTR_PALM, HIGH);
+  digitalWrite(PELT_CLR, HIGH);
+
+  // Success
+  Serial.println("Heaters/Cooler initialized\r\n");
+  return true;
 }
 
 // Thermistor Initialization
 bool setupThermistors() {
-//  // Start
-//  Serial.println("##########Initialize Thermistors##########");
-//
-//  // Set pinMode
-//  pinMode(THERM_THMB, INPUT);
-//  pinMode(THERM_INDX, INPUT);
-//  pinMode(THERM_MIDL1, INPUT);
-//  pinMode(THERM_MIDL2, INPUT);
-//  pinMode(THERM_PNKY, INPUT);
-//  pinMode(THERM_PALM, INPUT);
-//  pinMode(THERM_CLR, INPUT);
-//  pinMode(THERM_AMB, INPUT);
-//
-//  // Success
-//  Serial.println("Thermistors initialized\r\n");
-//  return true;
+  // Start
+  Serial.println("##########Initialize Thermistors##########");
+
+  // Set pinMode
+  pinMode(THERM_THMB, INPUT);
+  pinMode(THERM_INDX, INPUT);
+  pinMode(THERM_MIDL1, INPUT);
+  pinMode(THERM_MIDL2, INPUT);
+  pinMode(THERM_PNKY, INPUT);
+  pinMode(THERM_PALM, INPUT);
+  pinMode(THERM_CLR, INPUT);
+  pinMode(THERM_AMB, INPUT);
+
+  // Success
+  Serial.println("Thermistors initialized\r\n");
+  return true;
 }
 
 // Failsafe Function
@@ -373,7 +373,7 @@ void setup() {
        Serial.println("***HEATERS/COOLER INITIALIZATION FAIL***\r\n");
     if(!thermistorSuccess)
        Serial.println("***THERMISTOR INITIALIZATION FAIL***\r\n");
-//    while(true) {};
+    while(true) {};
   }
 
   // Flush
@@ -390,8 +390,8 @@ void setup() {
 void loop() {
   /* **********BLUETOOTH********** */
   // Read Serial
-//  String cmdLine = serialRX();
-  String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 3000";
+  String cmdLine = serialRX();
+  //String cmdLine = "-min -t -10 -max -t 50 -min -w 0 -max -w 10000 -t 50 -w 1000";
   if (DEBUG_PRINT)
   Serial.println("***Serial Values***");
   if (cmdLine != SERIAL_EMPTY_RX) {
@@ -484,118 +484,118 @@ void loop() {
   if (serialCommFails >= SERIAL_FAIL_MAX)
     failSafe();
 
-//  /* **********TEMPERATURE CONTROL********** */
-//  // Read temperature sensors
-//  int8_t handTemps[6];
-//  int8_t midl1Temp = voltToTemp(THERM_MIDL1);
-//  int8_t midl2Temp = voltToTemp(THERM_MIDL2);
-//  handTemps[0] = voltToTemp(THERM_THMB);
-//  handTemps[1] = voltToTemp(THERM_INDX);
-//  handTemps[2] = 0.5*(midl1Temp+midl2Temp);
-//  handTemps[3] = voltToTemp(THERM_PNKY);
-//  handTemps[4] = voltToTemp(THERM_PALM);
-//  int8_t clrTemp = voltToTemp(THERM_CLR);
-//  int8_t ambTemp = voltToTemp(THERM_AMB); // UNUSED
-//  int8_t avgTemp = (1.0/6.0)*(handTemps[0]+handTemps[1]+handTemps[2]+handTemps[3]+handTemps[4]+clrTemp);
-//  if (DEBUG_PRINT) {
-//    Serial.println("***Thermistor Values***");
-//    Serial.println("Thumb(degC): " + String(handTemps[0]));
-//    Serial.println("Index(degC): " + String(handTemps[1]));
-//    Serial.println("Middle 1(degC): " + String(midl1Temp));
-//    Serial.println("Middle 2(degC): " + String(midl2Temp));
-//    Serial.println("Pinky(degC): " + String(handTemps[3]));
-//    Serial.println("Palm(degC): " + String(handTemps[4]));
-//    Serial.println("Cooler(degC): " + String(clrTemp));
-//    Serial.println("Ambient(degC): " + String(ambTemp));
-//    Serial.println("Average(degC): " + String(avgTemp) + "\r\n");
-//  }
-//
-//  // Calculate temperature control signals
-//  htrOn = (refTemp >= avgTemp) ? true : false; // Heating or cooling
-//  if (htrOn) { // Calculate heater control signals
-//    float tempErr[5];
-//    for (int i=0; i < 5; i++) {
-//      tempErr[i] = refTemp - handTemps[i];
-//      if (tempErr[i] >= 0)
-//        tempOnTimes[i] += 3*tempErr[i];
-//      else if (tempErr[i] < 0)
-//        tempOnTimes[i] -= 8*tempErr[i];
-//      if (tempOnTimes[i] > TEMP_PERIOD)
-//        tempOnTimes[i] = TEMP_PERIOD;
-//    }
-//    
-//    // Turn cooler off
-//    tempOnTimes[5] = 0;
-//  }
-//  else if (!htrOn) { // Calculate cooler control signal
-//    float tempErr = refTemp - avgTemp;
-//    if (tempErr <= 0)
-//      tempOnTimes[5] -= 10*tempErr; 
-//    else if (tempErr > 0)
-//      tempOnTimes[5] -= 25*tempErr;
-//    if (tempOnTimes[5] > TEMP_PERIOD)
-//      tempOnTimes[5] = TEMP_PERIOD;
-//      
-//    // Turn heaters off
-//    tempOnTimes[0] = 0;
-//    tempOnTimes[1] = 0;
-//    tempOnTimes[2] = 0;
-//    tempOnTimes[3] = 0;
-//    tempOnTimes[4] = 0;
-//  }
-//  if (DEBUG_PRINT) {
-//    Serial.println("***Temp On Times(mS)***");
-//    Serial.println("Heater On: " + String(htrOn));
-//    Serial.println("Thumb: " + String(tempOnTimes[0]));
-//    Serial.println("Index: " + String(tempOnTimes[1]));
-//    Serial.println("Middles: " + String(tempOnTimes[2]));
-//    Serial.println("Pinky: " + String(tempOnTimes[3]));
-//    Serial.println("Palm: " + String(tempOnTimes[4]));
-//    Serial.println("Cooler: " + String(tempOnTimes[5]) + "\r\n");
-//  }
-//
-//  // Write temperature output
-//  if (htrOn) {
-//    if (currTime < tempOnTimes[0] && handTemps[0] < TEMP_MAX) // Thumb
-//      digitalWrite(HTR_THMB, LOW);
-//    else
-//      digitalWrite(HTR_THMB, HIGH);
-//    if (currTime < tempOnTimes[1] && handTemps[1] < TEMP_MAX) // Index
-//      digitalWrite(HTR_INDX, LOW);
-//    else
-//      digitalWrite(HTR_INDX, HIGH);
-//    if (currTime < tempOnTimes[2] && midl1Temp < TEMP_MAX && midl2Temp < TEMP_MAX) // Middles
-//      digitalWrite(HTR_MIDL, LOW);
-//    else
-//      digitalWrite(HTR_MIDL, HIGH && handTemps[1] < TEMP_MAX);
-//    if (currTime < tempOnTimes[3]) // Pinky
-//      digitalWrite(HTR_PNKY, LOW);
-//    else
-//      digitalWrite(HTR_PNKY, HIGH);
-//    if (currTime < tempOnTimes[4] && handTemps[1] < TEMP_MAX) // Palm
-//      digitalWrite(HTR_PALM, LOW);
-//    else
-//      digitalWrite(HTR_PALM, HIGH);
-//    digitalWrite(PELT_CLR, HIGH);
-//  }
-//  else if (!htrOn) {
-//    if (currTime < tempOnTimes[5] && clrTemp > TEMP_MIN) // Peltier
-//      digitalWrite(PELT_CLR, LOW);
-//    else
-//      digitalWrite(PELT_CLR, HIGH);
-//    digitalWrite(HTR_THMB, HIGH);
-//    digitalWrite(HTR_INDX, HIGH);
-//    digitalWrite(HTR_MIDL, HIGH);
-//    digitalWrite(HTR_PNKY, HIGH);
-//    digitalWrite(HTR_PALM, HIGH);
-//  }
-//  currTime += millis() - timeElapsed;
-//  currTime = currTime%TEMP_PERIOD;
-//  timeElapsed = millis();
-//  if (DEBUG_PRINT) {
-//    Serial.println("***Temp Control Time***");
-//    Serial.println("Current Time: " + String(currTime) + "\r\n");
-//  }
+  /* **********TEMPERATURE CONTROL********** */
+  // Read temperature sensors
+  int8_t handTemps[6];
+  int8_t midl1Temp = voltToTemp(THERM_MIDL1);
+  int8_t midl2Temp = voltToTemp(THERM_MIDL2);
+  handTemps[0] = voltToTemp(THERM_THMB);
+  handTemps[1] = voltToTemp(THERM_INDX);
+  handTemps[2] = 0.5*(midl1Temp+midl2Temp);
+  handTemps[3] = voltToTemp(THERM_PNKY);
+  handTemps[4] = voltToTemp(THERM_PALM);
+  int8_t clrTemp = voltToTemp(THERM_CLR);
+  int8_t ambTemp = voltToTemp(THERM_AMB); // UNUSED
+  int8_t avgTemp = (1.0/6.0)*(handTemps[0]+handTemps[1]+handTemps[2]+handTemps[3]+handTemps[4]+clrTemp);
+  if (DEBUG_PRINT) {
+    Serial.println("***Thermistor Values***");
+    Serial.println("Thumb(degC): " + String(handTemps[0]));
+    Serial.println("Index(degC): " + String(handTemps[1]));
+    Serial.println("Middle 1(degC): " + String(midl1Temp));
+    Serial.println("Middle 2(degC): " + String(midl2Temp));
+    Serial.println("Pinky(degC): " + String(handTemps[3]));
+    Serial.println("Palm(degC): " + String(handTemps[4]));
+    Serial.println("Cooler(degC): " + String(clrTemp));
+    Serial.println("Ambient(degC): " + String(ambTemp));
+    Serial.println("Average(degC): " + String(avgTemp) + "\r\n");
+  }
+
+  // Calculate temperature control signals
+  htrOn = (refTemp >= avgTemp) ? true : false; // Heating or cooling
+  if (htrOn) { // Calculate heater control signals
+    float tempErr[5];
+    for (int i=0; i < 5; i++) {
+      tempErr[i] = refTemp - handTemps[i];
+      if (tempErr[i] >= 0)
+        tempOnTimes[i] += 3*tempErr[i];
+      else if (tempErr[i] < 0)
+        tempOnTimes[i] -= 8*tempErr[i];
+      if (tempOnTimes[i] > TEMP_PERIOD)
+        tempOnTimes[i] = TEMP_PERIOD;
+    }
+    
+    // Turn cooler off
+    tempOnTimes[5] = 0;
+  }
+  else if (!htrOn) { // Calculate cooler control signal
+    float tempErr = refTemp - avgTemp;
+    if (tempErr <= 0)
+      tempOnTimes[5] -= 10*tempErr; 
+    else if (tempErr > 0)
+      tempOnTimes[5] -= 25*tempErr;
+    if (tempOnTimes[5] > TEMP_PERIOD)
+      tempOnTimes[5] = TEMP_PERIOD;
+      
+    // Turn heaters off
+    tempOnTimes[0] = 0;
+    tempOnTimes[1] = 0;
+    tempOnTimes[2] = 0;
+    tempOnTimes[3] = 0;
+    tempOnTimes[4] = 0;
+  }
+  if (DEBUG_PRINT) {
+    Serial.println("***Temp On Times(mS)***");
+    Serial.println("Heater On: " + String(htrOn));
+    Serial.println("Thumb: " + String(tempOnTimes[0]));
+    Serial.println("Index: " + String(tempOnTimes[1]));
+    Serial.println("Middles: " + String(tempOnTimes[2]));
+    Serial.println("Pinky: " + String(tempOnTimes[3]));
+    Serial.println("Palm: " + String(tempOnTimes[4]));
+    Serial.println("Cooler: " + String(tempOnTimes[5]) + "\r\n");
+  }
+
+  // Write temperature output
+  if (htrOn) {
+    if (currTime < tempOnTimes[0] && handTemps[0] < TEMP_MAX) // Thumb
+      digitalWrite(HTR_THMB, LOW);
+    else
+      digitalWrite(HTR_THMB, HIGH);
+    if (currTime < tempOnTimes[1] && handTemps[1] < TEMP_MAX) // Index
+      digitalWrite(HTR_INDX, LOW);
+    else
+      digitalWrite(HTR_INDX, HIGH);
+    if (currTime < tempOnTimes[2] && midl1Temp < TEMP_MAX && midl2Temp < TEMP_MAX) // Middles
+      digitalWrite(HTR_MIDL, LOW);
+    else
+      digitalWrite(HTR_MIDL, HIGH && handTemps[1] < TEMP_MAX);
+    if (currTime < tempOnTimes[3]) // Pinky
+      digitalWrite(HTR_PNKY, LOW);
+    else
+      digitalWrite(HTR_PNKY, HIGH);
+    if (currTime < tempOnTimes[4] && handTemps[1] < TEMP_MAX) // Palm
+      digitalWrite(HTR_PALM, LOW);
+    else
+      digitalWrite(HTR_PALM, HIGH);
+    digitalWrite(PELT_CLR, HIGH);
+  }
+  else if (!htrOn) {
+    if (currTime < tempOnTimes[5] && clrTemp > TEMP_MIN) // Peltier
+      digitalWrite(PELT_CLR, LOW);
+    else
+      digitalWrite(PELT_CLR, HIGH);
+    digitalWrite(HTR_THMB, HIGH);
+    digitalWrite(HTR_INDX, HIGH);
+    digitalWrite(HTR_MIDL, HIGH);
+    digitalWrite(HTR_PNKY, HIGH);
+    digitalWrite(HTR_PALM, HIGH);
+  }
+  currTime += millis() - timeElapsed;
+  currTime = currTime%TEMP_PERIOD;
+  timeElapsed = millis();
+  if (DEBUG_PRINT) {
+    Serial.println("***Temp Control Time***");
+    Serial.println("Current Time: " + String(currTime) + "\r\n");
+  }
 
   /* **********WEIGHT CONTROL********** */
   // Read weight feedback sensors
