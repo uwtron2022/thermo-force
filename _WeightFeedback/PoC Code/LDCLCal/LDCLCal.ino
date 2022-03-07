@@ -177,7 +177,7 @@ void setup() {
     while (1);
   }
   else {
-    LoadCell.setCalFactor(1.0); // user set calibration value (float), initial value 1.0 may be used for this sketch
+    LoadCell.setCalFactor(95); // user set calibration value (float), initial value 1.0 may be used for this sketch
     Serial.println("Startup is complete");
   }
   while (!LoadCell.update());

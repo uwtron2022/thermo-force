@@ -11,7 +11,7 @@ const int MOT_PWM = 11;
 const int MOT_DIR = 13;
 
 // Globals
-int pwmCmd = 0;
+int pwmCmd = 40;
 
 // Motor Shield Initalize
 void setupMotorShield() {
@@ -45,7 +45,7 @@ void loop() {
   digitalWrite(MOT_DIR, LOW);
 
   // Run Motor
-  Serial.println("Running Motor at PWM: " + String(pwmCmd));
+  Serial.println("Running Motor Dir: " + String(digitalRead(MOT_DIR)));
   analogWrite(MOT_PWM, pwmCmd);
 
   // Wait
@@ -56,6 +56,6 @@ void loop() {
     analogWrite(MOT_PWM, 0);
     while(true) {}
   }
-  else
-    pwmCmd += 1;
+//  else
+//    pwmCmd += 1;
 }
