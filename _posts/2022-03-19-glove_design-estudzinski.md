@@ -1,6 +1,6 @@
 --- 
 title: "Glove Design – March 13-19, 2022"
-date: 2022-12-05 00:00:01 -0000
+date: 2022-19-05 00:00:01 -0000
 categories: glove-design
 author: Emily Studzinski
 ---
