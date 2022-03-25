@@ -1,0 +1,24 @@
+HX711 caibration factor: -0.34
+HX711 measured conversion time ms: 105.36
+HX711 measured sampling rate HZ: 9.49
+HX711 measured settlingtime ms: 1687
+
+M = 5500, CalVal = 1.01
+M = 5500, CalVal = -0.31
+M = 5500, CalVal = 0.92
+FLIP LOADCELL, ARROW DOWN
+M = 5500, CalVal = 1.17
+M = 5500, CalVal = 2.20
+M = 5500, CalVal = 0.82 - OUTLIER
+M = 5500, CalVal = 3.11
+M = 5500, CalVal = 0.30 - OUTLIER
+M = 5500, CalVal = 2.04
+M = 5500, CalVal = 2.90
+M = 5500, CalVal = 1.97
+M = 5500, CalVal = 2.11
+M = 5500, CalVal = 2.31
+
+
+
+
+CALVAL = 0.73
