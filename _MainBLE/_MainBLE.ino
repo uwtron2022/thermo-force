@@ -81,6 +81,7 @@ int32_t massIntegralErr = 0;
 bool motDirection = LOW;
 uint8_t motPWM = 0;
 uint16_t motCurr = 0;
+uint16_t motCurr1 = 0;
 // Shunt ADC
 uint16_t adcSSCnts = 0;
 // Weight Feedback
@@ -324,32 +325,14 @@ bool bleTX(String msg) {
   return true;
 }
 
-// 5Pt Current Measurement
+// Current Measurement
 uint16_t currMeasSmoothed() {
-  // Read and average current counts
-  uint8_t totRuns = 0;
-  uint32_t countsAvg = 0;
-  for (uint8_t i=0; i<5; i++) {
-      // Read measurement
-      shuntADC.triggerConversion();
-      int16_t rawCounts = shuntADC.getConversion();
-      if (rawCounts >= 0 && rawCounts > adcSSCnts)
-        countsAvg += rawCounts-adcSSCnts;
-      else if (rawCounts >= 0 && rawCounts < adcSSCnts)
-        countsAvg += 0;
-      else if (i > 1)
-        i--;
-      else
-        i = 0;
-
-      // Prevent infinite loop
-      if (totRuns >= 10)
-        break;
-      totRuns += 1;
-    }
-
-  // Return mA's
-  return (countsAvg/5)*SHUNT_MULT*ADC_VPER_CNT;
+  // Read measurement, return
+  shuntADC.triggerConversion();
+  int16_t rawCounts = shuntADC.getConversion();
+  if (rawCounts >= 0 && rawCounts > adcSSCnts)
+    return rawCounts-adcSSCnts;
+  return motCurr1;
 }
 
 // Loadcell ISR Function
@@ -438,7 +421,6 @@ void loop() {
   /* **********BLUETOOTH********** */
   // Read BLE
   String cmdLine = bleRX();
-  cmdLine = "-w 1000";
   if (cmdLine != BLE_EMPTY_RX) {
     // Command switches
     String maxSwitch = "-max";
@@ -606,6 +588,7 @@ void loop() {
 
   /* **********WEIGHT CONTROL********** */
   // Read weight feedback sensors
+  motCurr1 = motCurr;
   motCurr = (motDirection == LOW) ? currMeasSmoothed() : -currMeasSmoothed();
   if (ldclMeasRdy) {
     ldclGrams1 = ldclGrams;
@@ -615,14 +598,16 @@ void loop() {
   }
       
   // Calculate weight control signals
-  int16_t ldclGramsAvg = 0.3*ldclGrams1+0.7*ldclGrams;
-  int16_t ldclErr = refMass-ldclGramsAvg;
-  int16_t ldclRoCErr = ldclErr-ldclErr1;
-  massIntegralErr += ((ldclRoCErr > 0) && (massIntegralErr < 0)) ? 0.5*ldclErr+15*ldclRoCErr : ldclErr;
+  int32_t ldclGramsAvg = 0.3*ldclGrams1+0.7*ldclGrams;
+  int32_t ldclErr = refMass-ldclGramsAvg;
+  int32_t ldclRoCErr = 100*(ldclErr-ldclErr1); // loop time is ~10mS
+  massIntegralErr += ldclErr;
+  int32_t massCtrl = 2.5*ldclErr + massIntegralErr + ldclRoCErr;
+
+  int32_t motCurrAvg = 0.5*(motCurr1 + motCurr);
+  int32_t currErr = currSetpoint-motCurrAvg;
   
-  int32_t currSetpoint = (massIntegralErr >= 0) ? 5.5*massIntegralErr*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST : 0.25*massIntegralErr*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST*((maxMass-refMass)/(maxMass-minMass));
-  int32_t currErr = currSetpoint-motCurr;
-  int32_t vCtrl = 1.2*currErr; // mA to mV
+  int32_t vCtrl = 1.2*(currSetpoint-motCurrAvg)*GRAM_GRAVITY*SPOOL_RAD/TORQ_CONST; // mA to mV
   if ((vCtrl < 0) && (vCtrl > -MOT_STICTION/2))
     vCtrl += -25;
   else if ((vCtrl > 0) && (vCtrl < MOT_STICTION))
@@ -693,5 +678,6 @@ void loop() {
     
   // First loop flag
   firstLoop = false;
+  motCurr1 = motCurr;
   ldclErr1 = ldclErr;
 }
